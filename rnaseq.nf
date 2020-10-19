@@ -77,12 +77,24 @@ include { run_multiqc } from './modules/multiqc.nf'
 workflow {
 
 /*
-* Check if reads are provided
+* Check if reads or SRA are provided
 */
 
-  if (!params.reads) {
+  if (params.reads) {
+    if (params.single) {
+      read_ch = Channel.fromPath( params.reads )
+    } else {
+      read_pairs_ch = Channel.fromFilePairs( params.reads )
+    }
+  } else if (params.sra) {
+    if (params.single) {
+      read_ch = Channel.fromSRA( params.sra )
+    } else {
+      read_pairs_ch = Channel.fromSRA( params.sra )
+    }
+  } else {
     error "No reads provided. Please specify reads with the --reads flag."
-  }
+  } 
 
 
 /*
@@ -111,37 +123,31 @@ workflow {
 * Main pipeline
 */
 	if( params.mode == 'salmon' && !params.single ) {
-		read_pairs_ch = Channel.fromFilePairs( params.reads )
-		SALMON(transcriptome, read_pairs_ch)
-		run_multiqc(SALMON.out, "$baseDir/${params.out}")
+	  	SALMON(transcriptome, read_pairs_ch)
+		  run_multiqc(SALMON.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'salmon' && params.single ) {
-		read_ch = Channel.fromPath( params.reads )
-                SALMONSE(transcriptome, read_ch)
-                run_multiqc(SALMONSE.out, "$baseDir/${params.out}")
+      SALMONSE(transcriptome, read_ch)
+      run_multiqc(SALMONSE.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'kallisto' && !params.single ) {
-		read_pairs_ch = Channel.fromFilePairs( params.reads )
-		KALLISTO(transcriptome, read_pairs_ch)
-		run_multiqc(KALLISTO.out, "$baseDir/${params.out}")
+	  	KALLISTO(transcriptome, read_pairs_ch)
+	  	run_multiqc(KALLISTO.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'kallisto' && params.single ) {
-		read_ch = Channel.fromPath( params.reads )
-                KALLISTOSE(transcriptome, read_ch)
-                run_multiqc(KALLISTOSE.out, "$baseDir/${params.out}")
+      KALLISTOSE(transcriptome, read_ch)
+      run_multiqc(KALLISTOSE.out, "$baseDir/${params.out}")
 		}
-        else if( params.mode == 'star' && !params.single ) {
-                read_pairs_ch = Channel.fromFilePairs( params.reads )
-                STAR(genome, transcriptome, read_pairs_ch)
-                run_multiqc(STAR.out, "$baseDir/${params.out}")
-                }
-        else if( params.mode == 'star' && params.single ) {
-                read_ch = Channel.fromPath( params.reads )
-                STARSE(genome, transcriptome, read_ch)
-                run_multiqc(STARSE.out, "$baseDir/${params.out}")
+  else if( params.mode == 'star' && !params.single ) {
+      STAR(genome, transcriptome, read_pairs_ch)
+      run_multiqc(STAR.out, "$baseDir/${params.out}")
+    }
+  else if( params.mode == 'star' && params.single ) {
+      STARSE(genome, transcriptome, read_ch)
+      run_multiqc(STARSE.out, "$baseDir/${params.out}")
                 }
 	else {
-		error "Invalid mapping mode: ${params.mode}"	
+		  error "Invalid mapping mode: ${params.mode}"	
 		}
 }
 
