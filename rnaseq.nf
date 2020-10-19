@@ -111,7 +111,7 @@ workflow {
 	} else if (params.mode == 'star') {
 		if (params.genome && params.gtf) {
 			genome = Channel.fromPath( params.genome )
-			gtf = params.gtf
+			gtf = Channel.fromPath( params.gtf )
 		} else {
 			error "Genome and/or GTF annotation file is not provided, but required for STAR mapping."
 		}
