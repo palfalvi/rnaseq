@@ -4,12 +4,12 @@ process star_idx {
 
         input:
 		path genome
-                path transcriptome
+                path gtf
         output:
                 path "${genome.simpleName}_idx"
         script:
                 """
 		mkdir ${genome.simpleName}_idx
-                STAR --runMode genomeGenerate --runThreadN ${task.cpus} --genomeDir ${genome.simpleName}_idx --genomeFastaFiles $genome --sjdbGTFfile $transcriptome --sjdbGTFfeatureExon "${params.sjdbGTFfeatureExon}"
+                STAR --runMode genomeGenerate --runThreadN ${task.cpus} --genomeDir ${genome.simpleName}_idx --genomeFastaFiles $genome --sjdbGTFfile $gtf --sjdbGTFfeatureExon "${params.sjdbGTFfeatureExon}"
                 """
 }

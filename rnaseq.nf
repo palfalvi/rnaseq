@@ -111,7 +111,7 @@ workflow {
 	} else if (params.mode == 'star') {
 		if (params.genome && params.gtf) {
 			genome = Channel.fromPath( params.genome )
-			transcriptome = params.gtf
+			gtf = params.gtf
 		} else {
 			error "Genome and/or GTF annotation file is not provided, but required for STAR mapping."
 		}
@@ -140,11 +140,11 @@ workflow {
       run_multiqc(KALLISTOSE.out, "$baseDir/${params.out}")
 		}
   else if( params.mode == 'star' && !params.single ) {
-      STAR(genome, transcriptome, read_pairs_ch)
+      STAR(genome, gtf, read_pairs_ch)
       run_multiqc(STAR.out, "$baseDir/${params.out}")
     }
   else if( params.mode == 'star' && params.single ) {
-      STARSE(genome, transcriptome, read_ch)
+      STARSE(genome, gtf, read_ch)
       run_multiqc(STARSE.out, "$baseDir/${params.out}")
                 }
 	else {
