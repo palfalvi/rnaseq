@@ -6,13 +6,13 @@ process collect_star {
   conda 'bioconda::subread=2.0.1'
         
 	input:
-	  path bam
+	  path sam
 	  path gtf
   output:
-    path "${bam}_gene.featureCounts.txt"
-    path "${bam}_gene.summary"
+    path "${sam}_gene.featureCounts.txt"
+    path "${sam}_gene.summary"
   script:
     """
-    featureCounts -T ${task.cpus} -a $gtf -o ${bam}_gene.featureCounts.txt -p ${bam}/bams/*.out.bam 2> ${bam}_gene.summary
+    featureCounts -T ${task.cpus} -a $gtf -o ${sam}_gene.featureCounts.txt -p ${sam}/*.out.sam 2> ${sam}_gene.summary
     """
 }
