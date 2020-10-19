@@ -4,11 +4,11 @@ process run_multiqc {
 
 	input:
 		path('*')
-		path(config)
-        output:
-                path 'multiqc*html'
-        script:
+		path config 
+  output:
+    path 'multiqc*html'
+  script:
                 """
-                multiqc $config/.
+                multiqc ./$config/.
                 """
 }
