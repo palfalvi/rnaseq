@@ -7,7 +7,6 @@ workflow STARSE {
         take:
                 genome
                 transcriptome
-		transcriptome
                 read_ch
         main:
                 star_idx(genome, transcriptome)
