@@ -11,17 +11,8 @@ process star_alignSE {
                 path reads
         output:
                 path "$reads.simpleName"
-
-                if (reads.getExtension == 'fastq' || reads.getExtension == 'fq') {
-                script:
-                  """
-                  STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn ${reads} --outFileNamePrefix ${reads.simpleName} --quantMode GeneCounts
-                  """
-                } else {
-                  script:
-                  """
-                  STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn <(gunzip -c ${reads}) --outFileNamePrefix ${reads.simpleName} --quantMode GeneCounts --
-                  """
-                }
-
+        script:
+                """
+                STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn <(gunzip -c ${reads}) --outFileNamePrefix ${reads.simpleName} --quantMode GeneCounts
+		            """
 }
