@@ -1,5 +1,3 @@
-
-
 process star_idx {
         cpus params.mapping.cpus
         conda 'star=2.7.6a'
