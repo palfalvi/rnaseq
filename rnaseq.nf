@@ -113,22 +113,22 @@ workflow {
 	if( params.mode == 'salmon' && !params.single ) {
 		read_pairs_ch = Channel.fromFilePairs( params.reads )
 		SALMON(transcriptome, read_pairs_ch)
-		run_multiqc(SALMON.out, "${params.out}")
+		run_multiqc(SALMON.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'salmon' && params.single ) {
 		read_ch = Channel.fromPath( params.reads )
                 SALMONSE(transcriptome, read_ch)
-                run_multiqc(SALMONSE.out, "${params.out}")
+                run_multiqc(SALMONSE.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'kallisto' && !params.single ) {
 		read_pairs_ch = Channel.fromFilePairs( params.reads )
 		KALLISTO(transcriptome, read_pairs_ch)
-		run_multiqc(KALLISTO.out, "${params.out}")
+		run_multiqc(KALLISTO.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'kallisto' && params.single ) {
 		read_ch = Channel.fromPath( params.reads )
                 KALLISTOSE(transcriptome, read_ch)
-                run_multiqc(KALLISTOSE.out, "${params.out}")
+                run_multiqc(KALLISTOSE.out, "$baseDir/${params.out}")
 		}
         else if( params.mode == 'star' && !params.single ) {
                 read_pairs_ch = Channel.fromFilePairs( params.reads )
