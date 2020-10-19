@@ -88,7 +88,8 @@ workflow {
     }
   } else if (params.sra) {
     if (params.single) {
-      read_ch = Channel.fromSRA( params.sra )
+      srain = Channel.fromSRA( params.sra )
+      read_ch = srain[1]
     } else {
       read_pairs_ch = Channel.fromSRA( params.sra )
     }
