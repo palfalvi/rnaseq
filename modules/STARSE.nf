@@ -15,5 +15,5 @@ workflow STARSE {
                 collect_star(star_alignSE.out, transcriptome)
                 run_fastqcSE(read_ch)
         emit:
-                collect_star.out | concat(run_fastqcSE.out) | collect
+                collect_star.out | run_fastqcSE.out | collect
 }
