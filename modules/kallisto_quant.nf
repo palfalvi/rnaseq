@@ -13,6 +13,6 @@ process kallisto_quant {
                 path sample_id
         script:
                 """
-                kallisto quant -t ${task.cpus} -i $transcriptome_idx -o $sample_id ${reads[0]} ${reads[1]}
+                kallisto quant -t ${task.cpus} -i $transcriptome_idx -o $sample_id ${reads[0]} ${reads[1]} &> ${sample_id}/${sample_id}.log
                 """
 }
