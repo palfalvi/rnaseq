@@ -12,6 +12,6 @@ process star_idx {
         script:
                 """
 		mkdir ${genome.simpleName}_idx
-                STAR --runMode genomeGenerate --runThreadN ${task.cpus} --genomeDir ${genome.baseName}_idx --genomeFastaFiles $genome --sjdbGTFfile $transcriptome --sjdbGTFfeatureExon "${params.sjdbGTFfeatureExon}"
+                STAR --runMode genomeGenerate --runThreadN ${task.cpus} --genomeDir ${genome.simpleName}_idx --genomeFastaFiles $genome --sjdbGTFfile $transcriptome --sjdbGTFfeatureExon "${params.sjdbGTFfeatureExon}"
                 """
 }
