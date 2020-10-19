@@ -10,7 +10,7 @@ process star_alignSE {
                 path genome_idx
                 path reads
         output:
-                path "${read.simpleName}"
+                path "$reads.simpleName"
         script:
                 """
                 STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn ${reads} --outFileNamePrefix ${reads.simpleName} --quantMode GeneCounts
