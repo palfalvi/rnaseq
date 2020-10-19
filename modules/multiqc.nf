@@ -1,5 +1,5 @@
 process run_multiqc {
-        conda 'multiqc=1.9'
+  conda 'multiqc=1.9'
  	publishDir "${params.out}", mode: 'move'       
 
 	input:
