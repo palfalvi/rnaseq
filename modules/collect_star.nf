@@ -12,7 +12,7 @@ process collect_star {
   output:
     path "${bam}_gene.featureCounts.txt*"
   script:
-  if ("$params.single") 
+  if (${params.single}) 
     """
     featureCounts -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam
     """
