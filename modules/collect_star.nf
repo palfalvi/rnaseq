@@ -6,7 +6,7 @@ process collect_star {
   conda 'bioconda::subread=2.0.1'
         
 	input:
-	  path sam
+	  path bam
 	  path gtf
   output:
     path "${bam}_gene.featureCounts.txt"
