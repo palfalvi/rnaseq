@@ -6,7 +6,9 @@ process salmon_idx {
         publishDir "${params.out}", mode: 'copy', enable: "${params.save_index}"
         
         conda 'salmon=1.3.0'
-
+        
+        when:
+                !salmon_index
         input:
                 path transcriptome
         output:
