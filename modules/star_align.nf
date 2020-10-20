@@ -3,7 +3,7 @@ process star_align {
 
 	publishDir "${params.out}/star", mode: 'move'
 
-	cpus params.mapping.cpus
+	cpus "$params.mapping.cpus"
         conda 'star=2.7.6a'
 
         input:
