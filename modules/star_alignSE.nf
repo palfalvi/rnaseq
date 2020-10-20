@@ -10,10 +10,10 @@ process star_alignSE {
                 path genome_idx
                 path reads
         output:
-                path "$reads.simpleName"_star
+                path "$reads.simpleName"
         script:
                 """
                 mkdir $reads.simpleName
-                STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn <(gunzip -c ${reads}) --outFileNamePrefix ${reads.simpleName}_star/${reads.simpleName}_ --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate
+                STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn <(gunzip -c ${reads}) --outFileNamePrefix ${reads.simpleName}/${reads.simpleName}_ --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate
 		            """
 }
