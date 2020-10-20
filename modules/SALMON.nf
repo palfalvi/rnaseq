@@ -6,13 +6,13 @@ workflow SALMON {
         take:
                 transcriptome 
                 read_pairs_ch
-                salmon_idx
+                index
         main:
-		          if ( !salmon_idx ) {
+		          if ( !index ) {
 		            salmon_idx(transcriptome)
                 salmon_quant(salmon_idx.out, read_pairs_ch)
 		          } else {
-		            salmon_quant(salmon_idx, read_pairs_ch)
+		            salmon_quant(index, read_pairs_ch)
 		          }
               
               run_fastqcSE(read_pairs_ch)
