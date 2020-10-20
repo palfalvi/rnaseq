@@ -119,14 +119,14 @@ workflow {
 		error "Invalid mapping mode: ${params.mode}"
 	}
 	
-	salmon_index = params.salmon_index
+	salmon_index = "${params.salmon_index}"
 	
 	
 /*
 * Main pipeline
 */
 	if( params.mode == 'salmon' && !params.single ) {
-	  	SALMON(transcriptome, read_pairs_ch, salmon_index)
+	  	SALMON(transcriptome, read_pairs_ch, "${params.salmon_index}")
 		  run_multiqc(SALMON.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'salmon' && params.single ) {
