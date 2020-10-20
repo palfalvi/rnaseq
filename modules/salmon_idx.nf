@@ -1,5 +1,3 @@
-
-
 process salmon_idx {
         tag "$transcriptome"
         cpus "$params.mapping.cpus"
