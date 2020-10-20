@@ -11,7 +11,7 @@ workflow STARSE {
         main:
                 star_index(genome, gtf)
                 star_alignSE(star_index.out, read_ch)
-                collect_star(star_alignSE.out, gtf)
+                collect_star(concat(star_alignSE.out), gtf)
                 run_fastqcSE(read_ch)
         emit:
                 star_alignSE.out | concat(run_fastqcSE.out) | collect
