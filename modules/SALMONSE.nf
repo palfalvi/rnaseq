@@ -6,7 +6,6 @@ workflow SALMONSE {
         take:
                 transcriptome 
                 read_ch
-                index
         main:
 		            salmon_idx(transcriptome)
                 salmon_quantSE(salmon_idx.out, read_ch)

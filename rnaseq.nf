@@ -119,7 +119,6 @@ workflow {
 		error "Invalid mapping mode: ${params.mode}"
 	}
 	
-	salmon_index = "${params.salmon_index}"
 	
 	
 /*
