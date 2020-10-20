@@ -3,7 +3,7 @@ process kallisto_quant {
 	
 	publishDir "${params.out}/kallisto", mode: 'copy'
 
-	cpus params.mapping.cpus
+	cpus "$params.mapping.cpus"
         conda 'kallisto=0.46.2'
 
         input:

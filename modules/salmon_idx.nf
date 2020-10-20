@@ -1,7 +1,7 @@
 
 
 process salmon_idx {
-        cpus params.mapping.cpus
+        cpus "$params.mapping.cpus"
         conda 'salmon=1.3.0'
 
         input:

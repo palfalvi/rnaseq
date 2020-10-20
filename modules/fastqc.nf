@@ -1,5 +1,5 @@
 process run_fastqc {
-        cpus params.fastqc.cpus
+        cpus "$params.fastqc.cpus"
         
 	publishDir "${params.out}/fastqc", mode: 'copy'
 

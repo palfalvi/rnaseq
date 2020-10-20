@@ -1,5 +1,5 @@
 process star_index {
-        cpus params.mapping.cpus
+        cpus "$params.mapping.cpus"
         conda 'star=2.7.6a'
 
         input:
