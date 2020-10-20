@@ -10,10 +10,10 @@ process star_align {
                 path genome_idx
                 tuple val(sample_id), file(reads)
         output:
-                path "$sample_id"
+                path sample_id
         script:
                 """
                 mkdir $sample_id
-                STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn <(gunzip -c ${reads[0]}) <(gunzip -c ${reads[1]}) --outFileNamePrefix ${sample_id}/${sample_id}_ --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate
+                STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn ${reads[0]} ${reads[1]} --readFilesCommand zcat --outFileNamePrefix ${sample_id}/${sample_id}_ --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate
 		"""
 }
