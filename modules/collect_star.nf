@@ -10,16 +10,15 @@ process collect_star {
 	  path bam
 	  path gtf
   output:
-    path "${bam}_gene.featureCounts.txt"
-    path "${bam}_gene.summary"
+    path "${bam}_gene.featureCounts.txt*"
   script:
   if ("$params.single") 
     """
-    featureCounts -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam 2> ${bam}_gene.featureCounts.summary
+    featureCounts -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam
     """
   else 
     """
-    featureCounts -p -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam 2> ${bam}_gene.featureCounts.summary
+    featureCounts -p -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam
     """
   
 }
