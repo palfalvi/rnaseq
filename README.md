@@ -71,4 +71,3 @@ nextflow run palfalvi/rnaseq --mode star --reads /path/to/reads/*R{1,2}.fastq --
 
 
 
-
