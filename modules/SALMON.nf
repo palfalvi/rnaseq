@@ -10,8 +10,7 @@ workflow SALMON {
         main:
 		         
 		          salmon_idx(transcriptome)
-		          index = salmon_idx.out
-		          salmon_quant(index, read_pairs_ch)
+		          salmon_quant(salmon_idx.out, read_pairs_ch)
               run_fastqcSE(read_pairs_ch)
 
 	      emit:
