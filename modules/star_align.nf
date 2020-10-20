@@ -14,6 +14,6 @@ process star_align {
         script:
                 """
                 mkdir $sample_id
-                STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn ${reads[0]} ${reads[1]} --outFileNamePrefix ${sample_id}/${sample_id}_ --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate
+                STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn <(gunzip -c ${reads[0]}) <(gunzip -c ${reads[1]}) --outFileNamePrefix ${sample_id}/${sample_id}_ --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate
 		"""
 }
