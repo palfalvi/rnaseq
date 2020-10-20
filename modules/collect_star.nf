@@ -13,6 +13,6 @@ process collect_star {
     path "${bam}_gene.summary"
   script:
     """
-    featureCounts -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt -p ${bam}/*.out.bam 2> ${bam}_gene.summary
+    featureCounts -T ${task.cpus} -p -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam 2> ${bam}_gene.summary
     """
 }
