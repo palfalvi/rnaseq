@@ -9,10 +9,10 @@ process collect_star {
 	  path sam
 	  path gtf
   output:
-    path "${sam}_gene.featureCounts.txt"
-    path "${sam}_gene.summary"
+    path "${bam}_gene.featureCounts.txt"
+    path "${bam}_gene.summary"
   script:
     """
-    featureCounts -T ${task.cpus} -a $gtf -o ${sam}_gene.featureCounts.txt -p ${sam}/*.out.sam 2> ${sam}_gene.summary
+    featureCounts -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt -p ${bam}/*.out.bam 2> ${bam}_gene.summary
     """
 }
