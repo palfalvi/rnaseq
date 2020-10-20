@@ -11,7 +11,7 @@ workflow STAR {
         main:
                 star_index(genome, gtf)
                 star_align(star_index.out, read_pairs_ch)
-                collect_star(concat(star_align.out), gtf)
+                collect_star(star_align.out, gtf)
                 run_fastqc(read_pairs_ch)
         emit:
                 collect_star.out | concat(run_fastqc.out) | collect
