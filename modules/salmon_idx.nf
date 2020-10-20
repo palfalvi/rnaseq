@@ -7,8 +7,6 @@ process salmon_idx {
         
         conda 'salmon=1.3.0'
         
-        when:
-                !salmon_index
         input:
                 path transcriptome
         output:
