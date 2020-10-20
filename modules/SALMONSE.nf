@@ -17,6 +17,6 @@ workflow SALMONSE {
               
               run_fastqcSE(read_ch)
                 
-	emit:
-		salmon_quantSE.out | concat(run_fastqcSE.out) | collect
+	      emit:
+	          	salmon_quantSE.out | concat(run_fastqcSE.out) | collect
 }
