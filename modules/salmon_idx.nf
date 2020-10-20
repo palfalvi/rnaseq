@@ -1,6 +1,7 @@
 
 
 process salmon_idx {
+        tag "$transcriptome"
         cpus "$params.mapping.cpus"
         conda 'salmon=1.3.0'
 

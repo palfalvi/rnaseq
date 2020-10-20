@@ -1,6 +1,7 @@
 
 
 process kallisto_idx {
+        tag "$transcriptome"
         
         conda 'kallisto=0.46.2'
 
