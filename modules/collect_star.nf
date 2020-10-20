@@ -14,11 +14,11 @@ process collect_star {
   script:
   if ("${params.single}") 
     """
-    featureCounts -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam 1> ${bam}_gene.summary
+    featureCounts -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam 2>&1 ${bam}_gene.summary
     """
   else 
     """
-    featureCounts -p -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam 1> ${bam}_gene.summary
+    featureCounts -p -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam 2>&1 ${bam}_gene.summary
     """
   
 }
