@@ -8,7 +8,7 @@ workflow SALMON {
                 read_pairs_ch
                 salmon_idx
         main:
-		          if ( $salmon_idx ) {
+		          if ( !salmon_idx ) {
 		            salmon_idx(transcriptome)
                 salmon_quant(salmon_idx.out, read_pairs_ch)
 		          } else {
