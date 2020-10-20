@@ -126,11 +126,11 @@ workflow {
 * Main pipeline
 */
 	if( params.mode == 'salmon' && !params.single ) {
-	  	SALMON(transcriptome, read_pairs_ch, "${params.salmon_index}")
+	  	SALMON(transcriptome, read_pairs_ch)
 		  run_multiqc(SALMON.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'salmon' && params.single ) {
-      SALMONSE(transcriptome, read_ch, salmon_index)
+      SALMONSE(transcriptome, read_ch)
       run_multiqc(SALMONSE.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'kallisto' && !params.single ) {

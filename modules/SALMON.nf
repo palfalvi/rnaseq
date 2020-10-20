@@ -6,9 +6,7 @@ workflow SALMON {
         take:
                 transcriptome 
                 read_pairs_ch
-                index
         main:
-		         
 		          salmon_idx(transcriptome)
 		          salmon_quant(salmon_idx.out, read_pairs_ch)
               run_fastqcSE(read_pairs_ch)
