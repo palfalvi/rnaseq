@@ -27,7 +27,7 @@ def helpMessage() {
 
     Usage:
     The typical command for running the pipeline is as follows:
-    rnaseq.nf --transcriptome path/to/transcripts.fasta --read /path/to/reads/*R{1,2}.fastq.gz --mode 'salmon'
+    nextflow run palfalvi/rnaseq --transcriptome path/to/transcripts.fasta --read /path/to/reads/*R{1,2}.fastq.gz --mode 'salmon'
  
     Mandatory arguments:
           --transcriptome                Transcript fasta file to map to. Not required for STAR mapping.
@@ -38,6 +38,7 @@ def helpMessage() {
           --mode                         Mapping method to use. Accepted method: 'salmon', 'kallisto' and 'star'. Default is ['salmon']
           --single                       Required for single end read processing. [false]
           --skip_qc                      If specified, fastqc step is skipped and only mapping is performed. [false]
+          --save_index                   Save index folder for later use. [false]
           --fastqc.cpus                  Number of threads to use for fastqc. [2]
           --mapping.cpus                 Number of threads to use for mapping. [20]
           --executor                     HPC executor, if available. As this workflow is optimized to NIBB-BIAS5 server, the default is ['pbspro']
@@ -141,11 +142,11 @@ workflow {
       run_multiqc(KALLISTOSE.out, "$baseDir/${params.out}")
 		}
   else if( params.mode == 'star' && !params.single ) {
-      STAR(genome, gtf, read_pairs_ch)
+      STAR(read_pairs_ch, genome, gtf)
       run_multiqc(STAR.out, "$baseDir/${params.out}")
     }
   else if( params.mode == 'star' && params.single ) {
-      STARSE(genome, gtf, read_ch)
+      STARSE(read_ch, genome, gtf)
       run_multiqc(STARSE.out, "$baseDir/${params.out}")
                 }
 	else {

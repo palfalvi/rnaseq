@@ -5,9 +5,9 @@ include { run_fastqc } from './fastqc.nf'
 
 workflow STAR {
         take:
+                read_pairs_ch
                 genome
                 gtf
-                read_pairs_ch
         main:
                 star_index(genome, gtf)
                 star_align(star_index.out, read_pairs_ch)

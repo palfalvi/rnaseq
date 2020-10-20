@@ -5,9 +5,9 @@ include { run_fastqcSE } from './fastqcSE.nf'
 
 workflow STARSE {
         take:
+                read_ch
                 genome
                 gtf
-                read_ch
         main:
                 star_index(genome, gtf)
                 star_alignSE(star_index.out, read_ch)

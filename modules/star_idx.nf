@@ -1,6 +1,7 @@
 process star_index {
         tag "$genome"
         cpus "$params.mapping.cpus"
+        publishDir "${params.out}/star_index", mode: 'copy', enable: "${params.save_index}"
         conda 'star=2.7.6a'
 
         input:
