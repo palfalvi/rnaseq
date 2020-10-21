@@ -1,10 +1,10 @@
 process run_fastqc {
         tag "$sample_id"
         cpus "$params.fastqc.cpus"
-        
+
 	publishDir "${params.out}/fastqc", mode: 'copy'
 
-        conda 'bioconda::fastqc=0.11.9 perl-app-cpanminus'
+        conda './conda-envs/fastqc-env.yaml'
         
 	when:
                 !params.skip_qc

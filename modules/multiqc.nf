@@ -1,5 +1,5 @@
 process run_multiqc {
-  conda 'bioconda::multiqc=1.9'
+  conda './conda-envs/multiqc-env.yaml'
  	publishDir "${params.out}", mode: 'move'
 
 	input:

@@ -4,7 +4,7 @@ process kallisto_quantSE {
 	publishDir "${params.out}/kallisto", mode: 'copy'
 
 	cpus "$params.mapping.cpus"
-        conda 'bioconda::kallisto=0.46.2'
+        conda './conda-envs/kallisto-env.yaml'
 
         input:
                 path transcriptome_idx

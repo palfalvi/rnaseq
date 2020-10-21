@@ -4,7 +4,7 @@ process salmon_quant {
 	publishDir "${params.out}/salmon", mode: 'copy'
 
 	cpus "$params.mapping.cpus"
-        conda 'bioconda::salmon=1.3.0'
+        conda './conda-envs/salmon-env.yaml'
 
         input:
                 path transcriptome_idx
