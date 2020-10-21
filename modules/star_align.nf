@@ -13,6 +13,7 @@ process star_align {
                 path sample_id
         script:
                 """
-                echo sample_id
+                mkdir $sample_id
+                STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn $reads --readFilesCommand zcat --outFileNamePrefix ${sample_id}/${sample_id}_ --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate
 		            """
 }
