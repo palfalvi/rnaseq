@@ -13,6 +13,6 @@ process star_alignSE {
                 path "$reads.simpleName"
         script:
                 """
-                echo reads.simpleName
+                echo $reads.simpleName
 		            """
 }
