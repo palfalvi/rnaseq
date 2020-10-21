@@ -6,11 +6,10 @@ include { run_fastqc } from './fastqc.nf'
 workflow STAR {
         take:
                 read_pairs_ch
-                genome
+                index
                 gtf
         main:
-                star_index(genome, gtf)
-                star_align(star_index.out, read_pairs_ch)
+                star_align(index, read_pairs_ch)
                 collect_star(star_align.out.collect(), gtf)
                 run_fastqc(read_pairs_ch)
         emit:

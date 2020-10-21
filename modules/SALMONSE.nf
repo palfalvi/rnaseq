@@ -4,13 +4,12 @@ include { run_fastqcSE } from './fastqcSE.nf'
 
 workflow SALMONSE {
         take:
-                transcriptome 
+                index 
                 read_ch
         main:
-		            salmon_idx(transcriptome)
-                salmon_quantSE(salmon_idx.out, read_ch)
+                salmon_quantSE(index, read_ch)
               run_fastqcSE(read_ch)
-                
+
 	      emit:
 	          	salmon_quantSE.out | concat(run_fastqcSE.out) | collect
 }

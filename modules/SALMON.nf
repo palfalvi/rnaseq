@@ -4,11 +4,10 @@ include { run_fastqc } from './fastqc.nf'
 
 workflow SALMON {
         take:
-                transcriptome 
+                index
                 read_pairs_ch
         main:
-              salmon_idx(transcriptome)
-              salmon_quant(salmon_idx.out, read_pairs_ch)
+              salmon_quant(index, read_pairs_ch)
               run_fastqc(read_pairs_ch)
 	      emit:
 		          salmon_quant.out | concat(run_fastqc.out) | collect

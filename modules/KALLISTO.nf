@@ -4,11 +4,10 @@ include { run_fastqc } from './fastqc.nf'
 
 workflow KALLISTO {
         take:
-                transcriptome
+                index
                 read_pairs_ch
         main:
-                kallisto_idx(transcriptome)
-                kallisto_quant(kallisto_idx.out, read_pairs_ch)
+                kallisto_quant(index, read_pairs_ch)
                 run_fastqc(read_pairs_ch)
 	emit:
                 kallisto_quant.out | concat(run_fastqc.out) | collect
