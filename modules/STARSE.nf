@@ -10,7 +10,7 @@ workflow STARSE {
                 gtf
         main:
                 star_alignSE(index, read_ch)
-                collect_starSE(star_alignSE.out.collect(), gtf)
+                collect_starSE(star_alignSE.out, gtf)
                 run_fastqcSE(read_ch)
         emit:
                 star_alignSE.out | concat(collect_starSE.out) | concat(run_fastqcSE.out) | collect

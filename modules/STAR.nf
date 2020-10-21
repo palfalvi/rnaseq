@@ -10,7 +10,7 @@ workflow STAR {
                 gtf
         main:
                 star_align(index, read_pairs_ch)
-                collect_star(star_align.out.collect(), gtf)
+                collect_star(star_align.out, gtf)
                 run_fastqc(read_pairs_ch)
         emit:
                 star_align.out | concat(run_fastqc.out) | collect
