@@ -1,4 +1,3 @@
-include { star_index } from './star_idx.nf'
 include { star_align } from './star_align.nf'
 include { collect_star } from './collect_star.nf'
 include { run_fastqc } from './fastqc.nf'
