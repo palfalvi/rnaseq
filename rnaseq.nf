@@ -114,9 +114,10 @@ workflow {
 	 		error "Transcriptome fasta file is not provided for ${params.mode} mapping. Please specify --transcriptome flag"
 		}
 	} else if (params.mode == 'star') {
-		if ( params.index ) {
+		if ( params.index && params.gtf ) {
       idx = file( params.index )
-    } else if (params.genome && params.gtf) {
+      gtf = file( params.gtf )
+    } else if ( params.genome && params.gtf ) {
 			genome = file( params.genome )
 			gtf = file( params.gtf )
       star_idx(genome, gtf)
