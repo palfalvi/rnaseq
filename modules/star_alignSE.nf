@@ -4,7 +4,7 @@ process star_alignSE {
 	publishDir "${params.out}/star", mode: 'copy'
 
 	cpus "$params.mapping.cpus"
-        conda 'star=2.7.6a'
+        conda 'bioconda::star=2.7.6a'
 
         input:
                 path genome_idx

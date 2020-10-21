@@ -1,10 +1,10 @@
 process kallisto_quant {
 	tag "${sample_id}"
-	
+
 	publishDir "${params.out}/kallisto", mode: 'copy'
 
 	cpus "$params.mapping.cpus"
-        conda 'kallisto=0.46.2'
+        conda 'bioconda::kallisto=0.46.2'
 
         input:
                 path transcriptome_idx

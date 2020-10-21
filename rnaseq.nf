@@ -5,12 +5,12 @@
 *-. .-.   .-. .-.   .-. .-.   .-. .-.   .-. .
 *||\|||\ /|||\|||\ /|||\|||\ /|||\|||\ /|||\|
 *|/ \|||\|||/ \|||\|||/ \|||\|||/ \|||\|||/ \
-*~   `-~ `-`   `-~ `-`   `-~ `-~   `-~ `-`   
+*~   `-~ `-`   `-~ `-`   `-~ `-~   `-~ `-`
 *          Transcriptome Analysis
 *-. .-.   .-. .-.   .-. .-.   .-. .-.   .-. .
 *||\|||\ /|||\|||\ /|||\|||\ /|||\|||\ /|||\|
 *|/ \|||\|||/ \|||\|||/ \|||\|||/ \|||\|||/ \
-*~   `-~ `-`   `-~ `-`   `-~ `-~   `-~ `-`   
+*~   `-~ `-`   `-~ `-`   `-~ `-~   `-~ `-`
 *============================================
 * Transcriptome Analysis Pipeline.
 * https://github.com/palfalvi/rnaseq
@@ -28,11 +28,11 @@ def helpMessage() {
     Usage:
     The typical command for running the pipeline is as follows:
     nextflow run palfalvi/rnaseq --transcriptome path/to/transcripts.fasta --read /path/to/reads/*R{1,2}.fastq.gz --mode 'salmon'
- 
+
     Mandatory arguments:
           --transcriptome                Transcript fasta file to map to. Not required for STAR mapping.
           --reads                        Path to raw reads in fastq or fastq.gz formats. For pair end reads, use {1,2}, e.g. /path/to/reads/*R{1,2}.fastq
-    
+
     Options:
           --out                          Output diresctory. [results]
           --mode                         Mapping method to use. Accepted method: 'salmon', 'kallisto' and 'star'. Default is ['salmon']
@@ -42,7 +42,7 @@ def helpMessage() {
           --fastqc.cpus                  Number of threads to use for fastqc. [2]
           --mapping.cpus                 Number of threads to use for mapping. [20]
           --executor                     HPC executor, if available. As this workflow is optimized to NIBB-BIAS5 server, the default is ['pbspro']
-          
+
     kallisto single end specific options:
           --fragment_length              Average fragment length for the sequencing. [300]
           --fragment_sd                  Fragment size SD for the sequencing. [1]
@@ -96,7 +96,7 @@ workflow {
     }
   } else {
     error "No reads provided. Please specify reads with the --reads flag."
-  } 
+  }
 
 
 /*
@@ -104,11 +104,11 @@ workflow {
 */
 	if (params.mode == 'salmon' || params.mode == 'kallisto') {
 		if (params.transcriptome) {
-			transcriptome = params.transcriptome	
+			transcriptome = Channel.fromPath( params.transcriptome )
 		} else {
 	 		error "Transcriptome fasta file is not provided for ${params.mode} mapping. Please specify --transcriptome flag"
 		}
-		
+
 	} else if (params.mode == 'star') {
 		if (params.genome && params.gtf) {
 			genome = Channel.fromPath( params.genome )
@@ -119,9 +119,9 @@ workflow {
 	} else {
 		error "Invalid mapping mode: ${params.mode}"
 	}
-	
-	
-	
+
+
+
 /*
 * Main pipeline
 */
@@ -150,7 +150,7 @@ workflow {
       run_multiqc(STARSE.out, "$baseDir/${params.out}")
                 }
 	else {
-		  error "Invalid mapping mode: ${params.mode}"	
+		  error "Invalid mapping mode: ${params.mode}"
 		}
 }
 
