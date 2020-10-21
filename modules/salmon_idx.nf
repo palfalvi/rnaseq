@@ -3,7 +3,7 @@ process salmon_idx {
         cpus "$params.mapping.cpus"
         publishDir "${params.out}/salmon_index", mode: 'copy', enable: "${params.save_index}"
 
-        conda './conda-envs/salmon-env.yaml'
+        conda "$baseDir/conda-envs/salmon-env.yaml"
 
         input:
                 path transcriptome
