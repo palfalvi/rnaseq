@@ -42,7 +42,7 @@ Done.
 If you wish to use SRA ids directly, you can provide with `--sra SRP043510` instead of `--reads`. This feature, however uses the [NCBI Esearch API](https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch), which requires an NCBI API Key in your environment. To get an API Key, follow [this link](https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/).
 
 After you get your API key, you need to set it into your environment. In your favorite editor (e.g. nano or vim) open `~/.bashrc` and in the end of the file, insert the following:
-`export NCBI_API_KEY=0123456789abcdef`.
+`export NCBI_API_KEY=0123456789abcdef` then save. You need to run `source ~/.bashrc` or log out and in again to make it work. From that point, you do not need to modify or rerun this part.
 
 ## How to run
 
@@ -57,7 +57,7 @@ Finally, you need to have a reference set. For `salmon` and `kallisto`, this sho
 
 ### Example commands
 
-#### Salmon mapping with paire end reads.
+#### Salmon mapping with pair end reads.
 
 ```
 nextflow run palfalvi/rnaseq --reads /path/to/reads/*R{1,2}.fastq --transcriptome transcripts.fasta
@@ -73,4 +73,10 @@ nextflow run palfalvi/rnaseq --mode kallisto --reads /path/to/reads/*.fastq --tr
 
 ```
 nextflow run palfalvi/rnaseq --mode star --reads /path/to/reads/*R{1,2}.fastq --genome genome.fastq --gtf annotation.gtf
+```
+
+#### Salmon with no fastqc and save the index files for later user. Also, save the results into `salmon_output` directory.
+
+```
+nextflow run palfalvi/rnaseq --reads /path/to/reads/*R{1,2}.fastq --transcriptome transcripts.fasta --save_index --skip_qc --out salmon_output
 ```
