@@ -76,14 +76,19 @@ workflow {
 * Check if reads or SRA are provided
 */
 
-  if (params.reads) {
-    if (params.single) {
+  if ( params.reads ) {
+    // Local reads provided
+    if ( params.single ) {
+      // Single end reads are read as Path channels
       read_ch = Channel.fromPath( params.reads )
     } else {
+      // Pair end reads are read as File Pair tuples
       read_pairs_ch = Channel.fromFilePairs( params.reads )
     }
-  } else if (params.sra) {
-    if (params.single) {
+  } else if ( params.sra ) {
+    // SRA provided
+    if ( params.single ) {
+      // Single end SRA is provided,
       srain = Channel.fromSRA( params.sra )
       read_ch = srain[1]
     } else {
@@ -100,13 +105,16 @@ workflow {
 */
 	if (params.mode == 'salmon' || params.mode == 'kallisto') {
 		if ( params.index ) {
-        idx = file( params.index )
+      // Read in salmon or kallisto index
+      idx = file( params.index )
       } else if (params.transcriptome) {
 			  transcriptome = file( params.transcriptome )
         if (params.mode == 'salmon') {
+          // Make salmon index
           salmon_idx(transcriptome)
           idx = salmon_idx.out
         } else if (params.mode == 'kallisto') {
+          // Make kallisto index
           kallisto_idx(transcriptome)
           idx = kallisto_idx.out
           }
@@ -115,9 +123,11 @@ workflow {
 		}
 	} else if (params.mode == 'star') {
 		if ( params.index && params.gtf ) {
+      // Read in index and gtf files
       idx = file( params.index )
       gtf = file( params.gtf )
     } else if ( params.genome && params.gtf ) {
+      // Read in genome and gtf, make index
 			genome = file( params.genome )
 			gtf = file( params.gtf )
       star_idx(genome, gtf)
@@ -129,7 +139,16 @@ workflow {
 		error "Invalid mapping mode: ${params.mode}"
 	}
 
-
+/*
+* Optional trimming
+*/
+  if ( params.trim ) {
+    if ( params.single ) {
+      // single end trim
+    } else {
+      // pair end trim
+    }
+  }
 
 /*
 * Main pipeline
