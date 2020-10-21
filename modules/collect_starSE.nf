@@ -4,7 +4,7 @@ process collect_starSE {
 
 	publishDir "${params.out}/featureCounts", mode: 'copy'
 
-  conda './conda-envs/subread-env.yaml'
+  conda "$baseDir/conda-envs/subread-env.yaml"
 
 	input:
 	  path bam

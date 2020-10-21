@@ -4,7 +4,7 @@ process run_fastqcSE {
 
 	publishDir "${params.out}/fastqc", mode: 'copy'
 
-        conda './conda-envs/fastqc-env.yaml'
+        conda "$baseDir/conda-envs/fastqc-env.yaml"
 
         when:
 		!params.skip_qc

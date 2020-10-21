@@ -4,7 +4,7 @@ process kallisto_quant {
 	publishDir "${params.out}/kallisto", mode: 'copy'
 
 	cpus "$params.mapping.cpus"
-        conda './conda-envs/kallisto-env.yaml'
+        conda "$baseDir/conda-envs/kallisto-env.yaml"
 
         input:
                 path transcriptome_idx

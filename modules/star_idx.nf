@@ -2,7 +2,7 @@ process star_index {
         tag "$genome"
         cpus "$params.mapping.cpus"
         publishDir "${params.out}/star_index", mode: 'copy', enable: "${params.save_index}"
-        conda './conda-envs/star-env.yaml'
+        conda "$baseDir/conda-envs/star-env.yaml"
 
         input:
 		path genome
