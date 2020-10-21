@@ -42,6 +42,8 @@ def helpMessage() {
           --fastqc.cpus                  Number of threads to use for fastqc. [2]
           --mapping.cpus                 Number of threads to use for mapping. [20]
           --executor                     HPC executor, if available. As this workflow is optimized to NIBB-BIAS5 server, the default is ['pbspro']
+          --save_index                   Saves index file for future reuse.
+          --index                        External index file. Overrides index creations. If provided, transcriptome and genome options are deprecated.
 
     kallisto single end specific options:
           --fragment_length              Average fragment length for the sequencing. [300]
@@ -104,15 +106,15 @@ workflow {
 */
 	if (params.mode == 'salmon' || params.mode == 'kallisto') {
 		if (params.transcriptome) {
-			transcriptome = Channel.fromPath( params.transcriptome )
+			transcriptome = file( params.transcriptome )
 		} else {
 	 		error "Transcriptome fasta file is not provided for ${params.mode} mapping. Please specify --transcriptome flag"
 		}
 
 	} else if (params.mode == 'star') {
 		if (params.genome && params.gtf) {
-			genome = Channel.fromPath( params.genome )
-			gtf = Channel.fromPath( params.gtf )
+			genome = file( params.genome )
+			gtf = file( params.gtf )
 		} else {
 			error "Genome and/or GTF annotation file is not provided, but required for STAR mapping."
 		}
