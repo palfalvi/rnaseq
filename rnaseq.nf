@@ -2,16 +2,6 @@
 
 /*
 *============================================
-*-. .-.   .-. .-.   .-. .-.   .-. .-.   .-. .
-*||\|||\ /|||\|||\ /|||\|||\ /|||\|||\ /|||\|
-*|/ \|||\|||/ \|||\|||/ \|||\|||/ \|||\|||/ \
-*~   `-~ `-`   `-~ `-`   `-~ `-~   `-~ `-`
-*          Transcriptome Analysis
-*-. .-.   .-. .-.   .-. .-.   .-. .-.   .-. .
-*||\|||\ /|||\|||\ /|||\|||\ /|||\|||\ /|||\|
-*|/ \|||\|||/ \|||\|||/ \|||\|||/ \|||\|||/ \
-*~   `-~ `-`   `-~ `-`   `-~ `-~   `-~ `-`
-*============================================
 * Transcriptome Analysis Pipeline.
 * https://github.com/palfalvi/rnaseq
 *--------------------------------------------
@@ -29,7 +19,7 @@ def helpMessage() {
     The typical command for running the pipeline is as follows:
     nextflow run palfalvi/rnaseq --transcriptome path/to/transcripts.fasta --read /path/to/reads/*R{1,2}.fastq.gz --mode 'salmon'
 
-    Mandatory arguments:
+    Minimal arguments:
           --transcriptome                Transcript fasta file to map to. Not required for STAR mapping.
           --reads                        Path to raw reads in fastq or fastq.gz formats. For pair end reads, use {1,2}, e.g. /path/to/reads/*R{1,2}.fastq
 
@@ -74,6 +64,9 @@ include { KALLISTO } from './modules/KALLISTO.nf'
 include { KALLISTOSE } from './modules/KALLISTOSE.nf'
 include { STAR } from './modules/STAR.nf'
 include { STARSE } from './modules/STARSE.nf'
+include { star_idx } from './modules/star_idx.nf'
+include { salmon_idx } from './modules/salmon_idx.nf'
+include { kallisto_idx } from './modules/kallisto_idx.nf'
 include { run_multiqc } from './modules/multiqc.nf'
 
 
@@ -83,14 +76,19 @@ workflow {
 * Check if reads or SRA are provided
 */
 
-  if (params.reads) {
-    if (params.single) {
+  if ( params.reads ) {
+    // Local reads provided
+    if ( params.single ) {
+      // Single end reads are read as Path channels
       read_ch = Channel.fromPath( params.reads )
     } else {
+      // Pair end reads are read as File Pair tuples
       read_pairs_ch = Channel.fromFilePairs( params.reads )
     }
-  } else if (params.sra) {
-    if (params.single) {
+  } else if ( params.sra ) {
+    // SRA provided
+    if ( params.single ) {
+      // Single end SRA is provided,
       srain = Channel.fromSRA( params.sra )
       read_ch = srain[1]
     } else {
@@ -103,52 +101,80 @@ workflow {
 
 /*
 * Check if transcriptome/genome/gtf files are provided and read them in
+* Also look for external index files
 */
 	if (params.mode == 'salmon' || params.mode == 'kallisto') {
-		if (params.transcriptome) {
-			transcriptome = file( params.transcriptome )
+		if ( params.index ) {
+      // Read in salmon or kallisto index
+      idx = file( params.index )
+      } else if (params.transcriptome) {
+			  transcriptome = file( params.transcriptome )
+        if (params.mode == 'salmon') {
+          // Make salmon index
+          salmon_idx(transcriptome)
+          idx = salmon_idx.out
+        } else if (params.mode == 'kallisto') {
+          // Make kallisto index
+          kallisto_idx(transcriptome)
+          idx = kallisto_idx.out
+          }
 		} else {
 	 		error "Transcriptome fasta file is not provided for ${params.mode} mapping. Please specify --transcriptome flag"
 		}
-
 	} else if (params.mode == 'star') {
-		if (params.genome && params.gtf) {
+		if ( params.index && params.gtf ) {
+      // Read in index and gtf files
+      idx = file( params.index )
+      gtf = file( params.gtf )
+    } else if ( params.genome && params.gtf ) {
+      // Read in genome and gtf, make index
 			genome = file( params.genome )
 			gtf = file( params.gtf )
-		} else {
+      star_idx(genome, gtf)
+      idx = star_idx.out
+    } else {
 			error "Genome and/or GTF annotation file is not provided, but required for STAR mapping."
 		}
 	} else {
 		error "Invalid mapping mode: ${params.mode}"
 	}
 
-
+/*
+* Optional trimming
+*/
+  if ( params.trim ) {
+    if ( params.single ) {
+      // single end trim
+    } else {
+      // pair end trim
+    }
+  }
 
 /*
 * Main pipeline
 */
 	if( params.mode == 'salmon' && !params.single ) {
-	  	SALMON(transcriptome, read_pairs_ch)
+	  	SALMON(idx, read_pairs_ch)
 		  run_multiqc(SALMON.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'salmon' && params.single ) {
-      SALMONSE(transcriptome, read_ch)
+      SALMONSE(idx, read_ch)
       run_multiqc(SALMONSE.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'kallisto' && !params.single ) {
-	  	KALLISTO(transcriptome, read_pairs_ch)
+	  	KALLISTO(idx, read_pairs_ch)
 	  	run_multiqc(KALLISTO.out, "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'kallisto' && params.single ) {
-      KALLISTOSE(transcriptome, read_ch)
+      KALLISTOSE(idx, read_ch)
       run_multiqc(KALLISTOSE.out, "$baseDir/${params.out}")
 		}
   else if( params.mode == 'star' && !params.single ) {
-      STAR(read_pairs_ch, genome, gtf)
+      STAR(read_pairs_ch, idx, gtf)
       run_multiqc(STAR.out, "$baseDir/${params.out}")
     }
   else if( params.mode == 'star' && params.single ) {
-      STARSE(read_ch, genome, gtf)
+      STARSE(read_ch, idx, gtf)
       run_multiqc(STARSE.out, "$baseDir/${params.out}")
                 }
 	else {
