@@ -87,6 +87,7 @@ workflow {
     }
   } else if ( params.sra ) {
     // SRA provided
+    // Can we automatically detect if SRA is SE or PE?
     if ( params.single ) {
       // Single end SRA is provided,
       srain = Channel.fromSRA( params.sra )
