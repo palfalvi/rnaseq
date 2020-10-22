@@ -1,9 +1,7 @@
 process salmon_quantSE {
 	tag "${reads.simpleName}"
-
 	publishDir "${params.out}/salmon", mode: 'copy'
-
-	cpus "$params.mapping.cpus"
+	cpus "$params.cpus"
   conda "$baseDir/conda-envs/salmon-env.yaml"
 
   input:

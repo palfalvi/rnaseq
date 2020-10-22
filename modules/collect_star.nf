@@ -1,6 +1,6 @@
 process collect_star {
   tag "$bam"
-  cpus "$params.fastqc.cpus"
+  cpus "$params.cpus"
 
 	publishDir "${params.out}/featureCounts", mode: 'copy'
 
