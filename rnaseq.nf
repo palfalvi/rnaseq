@@ -103,7 +103,7 @@ workflow {
     if ( params.single ) {
       // Single end SRA is provided,
       srain = Channel.fromSRA( params.sra )
-      read_ch = srain[1]
+      read_ch = srain
     } else {
       read_pairs_ch = Channel.fromSRA( params.sra )
     }
