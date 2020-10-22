@@ -4,15 +4,21 @@ process salmon_quantSE {
 	publishDir "${params.out}/salmon", mode: 'copy'
 
 	cpus "$params.mapping.cpus"
-        conda "$baseDir/conda-envs/salmon-env.yaml"
+  conda "$baseDir/conda-envs/salmon-env.yaml"
 
-        input:
-                path transcriptome_idx
-                path reads
-        output:
-                path "$reads.simpleName"
-        script:
-                """
-                salmon quant --libType A --validateMappings -p ${task.cpus} -i $transcriptome_idx -r ${reads} -o $reads.simpleName
-                """
+  input:
+  	path transcriptome_idx
+    path reads
+  output:
+    path "$reads.simpleName"
+  script:
+    """
+    salmon quant \
+		--libType A \
+		--validateMappings \
+		-p ${task.cpus} \
+		-i $transcriptome_idx \
+		-r ${reads} \
+		-o $reads.simpleName
+    """
 }
