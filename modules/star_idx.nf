@@ -2,7 +2,7 @@ process star_idx {
   tag "$genome"
   cpus "$params.cpus"
   publishDir "${params.out}/star_index",
-             mode: 'copy', saveAs: { params.save_index ? it : null },
+             mode: 'copy', saveAs: { params.save_index ? it : null }
   conda "$baseDir/conda-envs/star-env.yaml"
 
   input:
