@@ -9,6 +9,7 @@ process run_multiqc {
     path 'multiqc*html'
   script:
                 """
-                multiqc $baseDir/$config/
+                export LC_ALL=en_US.utf8
+                multiqc .
                 """
 }
