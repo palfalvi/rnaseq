@@ -225,7 +225,7 @@ workflow {
       star_align(idx, read_pairs_ch)
     } else {
       // Run fastp and align on trimmed reads
-      fastp(read_pairs_ch)
+      run_fastp(read_pairs_ch)
       star_align(idx, run_fastp.out.trimmed)
     }
     // collect STAR alignemnts
@@ -239,7 +239,7 @@ workflow {
       star_alignSE(idx, read_ch)
     } else {
       // Run fastp and align on trimmed reads
-      fastpSE(read_ch)
+      run_fastpSE(read_ch)
       star_alignSE(idx, run_fastpSE.out.trimmed)
     }
     // collect STAR alignemnts
