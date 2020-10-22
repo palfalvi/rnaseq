@@ -20,6 +20,6 @@ script:
   -o trim_${reads[0]} \
   -O trim_${reads[1]} \
   --detect_adapter_for_pe \
-  -json ${sample_id}_fastp.json
+  --json ${sample_id}_fastp.json
   """
 }

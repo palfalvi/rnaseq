@@ -17,6 +17,6 @@ script:
   -w ${task.cpus} \
   -i ${reads} \
   -o trim_${reads} \
-  -json ${sample_id}_fastp.json
+  --json ${sample_id}_fastp.json
   """
 }
