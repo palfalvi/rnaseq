@@ -9,7 +9,7 @@ workflow SALMON {
                 read_pairs_ch
         main:
               run_fastp(read_pairs_ch)
-              salmon_quant(index, run_fastp.out.reads)
+              salmon_quant(index, run_fastp.out.trimmed)
 	      emit:
 		          salmon_quant.out | concat(run_fastp.out.json) | collect
 }

@@ -9,7 +9,7 @@ when:
 input:
   file reads
 output:
-  tuple file("trim_${reads}"), emit: reads
+  tuple file("trim_${reads}"), emit: trimmed
   file "${sample_id}_fastp.json", emit: json
 script:
   """

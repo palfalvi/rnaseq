@@ -9,7 +9,7 @@ workflow SALMONSE {
     read_ch
   main:
     run_fastp(read_ch)
-    salmon_quantSE(index, run_fastpSE.out.reads)
+    salmon_quantSE(index, run_fastpSE.out.trimmed)
 	emit:
 	  salmon_quantSE.out | concat(run_fastpSE.out.json) | collect
 }
