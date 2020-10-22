@@ -63,10 +63,10 @@ include { kallisto_idx } from './modules/kallisto_idx.nf'
 include { kallisto_quant } from './modules/kallisto_quant.nf'
 include { kallisto_quantSE } from './modules/kallisto_quantSE.nf'
 include { star_idx } from './modules/star_idx.nf'
-include { star_align } from './star_align.nf'
-include { collect_star } from './collect_star.nf'
-include { star_alignSE } from './star_alignSE.nf'
-include { collect_starSE } from './collect_starSE.nf'
+include { star_align } from './modules/star_align.nf'
+include { collect_star } from './modules/collect_star.nf'
+include { star_alignSE } from './modules/star_alignSE.nf'
+include { collect_starSE } from './modules/collect_starSE.nf'
 include { run_fastp } from './modules/fastp.nf'
 include { run_fastpSE } from './modules/fastpSE.nf'
 include { run_multiqc } from './modules/multiqc.nf'
@@ -82,7 +82,7 @@ workflow {
   Running pipeline in $params.mode mode.
   """.stripIndent()
 
-  
+
 /*
 * Check if reads or SRA are provided
 */
