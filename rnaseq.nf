@@ -190,7 +190,7 @@ workflow {
       salmon_quantSE(idx, run_fastp.out.trimmed)
     }
     // Run multiqc after salmon_quant finished.
-    run_multiqc(collect(salmon_quantSE.out), "$baseDir/${params.out}")
+    run_multiqc(salmon_quantSE.out.collect(), "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'kallisto' && !params.single ) {
       // kallisto PE mode
@@ -200,10 +200,10 @@ workflow {
       } else {
         // Run fastp and quant on trimmed reads.
         run_fastp(read_pairs_ch)
-        kallisto_quant(idx, run_fastpSE.out.trimmed)
+        kallisto_quant(idx, run_fastp.out.trimmed)
       }
       // Run multiqc after salmon_quant finished.
-      run_multiqc(collect(kallisto_quant.out), "$baseDir/${params.out}")
+      run_multiqc(kallisto_quant.out.collect(), "$baseDir/${params.out}")
   	}
   else if( params.mode == 'kallisto' && params.single ) {
       // kallisto SE mode
@@ -216,7 +216,7 @@ workflow {
         kallisto_quantSE(idx, run_fastpSE.out.trimmed)
       }
       // Run multiqc after salmon_quant finished.
-      run_multiqc(collect(kallisto_quantSE.out), "$baseDir/${params.out}")
+      run_multiqc(kallisto_quantSE.out.collect(), "$baseDir/${params.out}")
   }
   else if( params.mode == 'star' && !params.single ) {
     // STAR PE module
@@ -230,7 +230,7 @@ workflow {
     }
     // collect STAR alignemnts
     collect_star(star_align.out, gtf)
-    run_multiqc(collect(collect_star.out), "$baseDir/${params.out}")
+    run_multiqc(collect_star.out.collect(), "$baseDir/${params.out}")
   }
   else if( params.mode == 'star' && params.single ) {
     // STAR SE module
@@ -244,7 +244,7 @@ workflow {
     }
     // collect STAR alignemnts
     collect_starSE(star_alignSE.out, gtf)
-    run_multiqc(collect(collect_starSE.out), "$baseDir/${params.out}")
+    run_multiqc(collect_starSE.out.collect(), "$baseDir/${params.out}")
   }
 	else {
 		  error "Invalid mapping mode: ${params.mode}"
