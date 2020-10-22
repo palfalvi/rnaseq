@@ -177,7 +177,7 @@ workflow {
       salmon_quant(idx, run_fastp.out.trimmed)
     }
     // Run multiqc after salmon_quant finished.
-    run_multiqc(collect(salmon_quant.out), "$baseDir/${params.out}")
+    run_multiqc(concat(salmon_quant.out), "$baseDir/${params.out}")
 	}
 	else if( params.mode == 'salmon' && params.single ) {
     // salmon SE mode
