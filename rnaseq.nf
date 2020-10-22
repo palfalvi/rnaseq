@@ -7,6 +7,10 @@
 *--------------------------------------------
 */
 
+log.info """
+
+""".stripIndent()
+
 
 def helpMessage() {
     log.info """
@@ -17,7 +21,7 @@ def helpMessage() {
 
     Usage:
     The typical command for running the pipeline is as follows:
-    nextflow run palfalvi/rnaseq --transcriptome path/to/transcripts.fasta --read /path/to/reads/*R{1,2}.fastq.gz --mode 'salmon'
+    nextflow run palfalvi/rnaseq --transcriptome path/to/transcripts.fasta --read /path/to/reads/*R{1,2}.fastq.gz
 
     Minimal arguments:
           --transcriptome                Transcript fasta file to map to. Not required for STAR mapping.
@@ -64,9 +68,16 @@ include { KALLISTO } from './modules/KALLISTO.nf'
 include { KALLISTOSE } from './modules/KALLISTOSE.nf'
 include { STAR } from './modules/STAR.nf'
 include { STARSE } from './modules/STARSE.nf'
-include { star_idx } from './modules/star_idx.nf'
 include { salmon_idx } from './modules/salmon_idx.nf'
+include { salmon_quant } from './salmon_quant.nf'
+include { salmon_quantSE } from './salmon_quantSE.nf'
 include { kallisto_idx } from './modules/kallisto_idx.nf'
+include { kallisto_quant } from './kallisto_quant.nf'
+include { kallisto_quantSE } from './kallisto_quantSE.nf'
+include { star_idx } from './modules/star_idx.nf'
+
+include { run_fastp } from './fastp.nf'
+include { run_fastpSE } from './fastpSE.nf'
 include { run_multiqc } from './modules/multiqc.nf'
 
 
@@ -154,10 +165,20 @@ workflow {
 * Main pipeline
 */
 	if( params.mode == 'salmon' && !params.single ) {
-	  	SALMON(idx, read_pairs_ch)
-		  run_multiqc(SALMON.out, "$baseDir/${params.out}")
-		}
+    // salmon PE mode
+    if ( params.skip_qc ) {
+      // Don't run fastp, just quant on input reads.
+      salmon_quant(idx, read_pairs_ch)
+    } else {
+      // Run fastp and quant on trimmed reads.
+      run_fastp(read_pairs_ch)
+      salmon_quant(idx, run_fastp.out.trimmed)
+    }
+    // Run multiqc after salmon_quant finished.
+    run_multiqc(salmon_quant.out, "$baseDir/${params.out}")
+	}
 	else if( params.mode == 'salmon' && params.single ) {
+    // salmon SE mode
       SALMONSE(idx, read_ch)
       run_multiqc(SALMONSE.out, "$baseDir/${params.out}")
 		}
