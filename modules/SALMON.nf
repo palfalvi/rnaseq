@@ -1,7 +1,7 @@
 include { salmon_idx } from './salmon_idx.nf'
 include { salmon_quant } from './salmon_quant.nf'
 include { run_fastqc } from './fastqc.nf'
-include { run_fastp } from './modules/fastp.nf'
+include { run_fastp } from './fastp.nf'
 
 workflow SALMON {
         take:
