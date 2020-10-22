@@ -1,7 +1,7 @@
 process run_fastp {
 tag "$sample_id"
 cpus "$params.fastqc.cpus"
-
+publishDir "${params.out}/fastp_qc", mode: 'copy', pattern: '*.json'
 conda "$baseDir/conda-envs/trim-env.yaml"
 
 when:
