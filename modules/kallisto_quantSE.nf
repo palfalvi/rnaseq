@@ -18,8 +18,8 @@ process kallisto_quantSE {
 		-s ${params.fragment_sd} \
 		-i $transcriptome_idx \
 		-o $reads.simpleName ${reads} \
-		&> ${reads.simpleName}/${reads.simpleName}.log
-		
+		&> ${reads.simpleName}.log
+
     mv ${reads.simpleName}.log ${reads.simpleName}/
     """
 }
