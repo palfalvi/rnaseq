@@ -1,9 +1,7 @@
 process star_alignSE {
 	tag "$reads.simpleName"
-
 	publishDir "${params.out}/star", mode: 'copy'
-
-	cpus "$params.mapping.cpus"
+	cpus "$params.cpus"
   conda "$baseDir/conda-envs/star-env.yaml"
 
   input:
@@ -14,6 +12,13 @@ process star_alignSE {
   script:
     """
     mkdir "${reads.simpleName}"
-    STAR --runThreadN $task.cpus --genomeDir $genome_idx --readFilesIn $reads --readFilesCommand zcat --outFileNamePrefix ${reads.simpleName}/${reads.simpleName}_ --quantMode GeneCounts --outSAMtype BAM SortedByCoordinate
+    STAR \
+		--runThreadN $task.cpus \
+		--genomeDir $genome_idx \
+		--readFilesIn $reads \
+		--readFilesCommand zcat \
+		--outFileNamePrefix ${reads.simpleName}/${reads.simpleName}_ \
+		--quantMode GeneCounts \
+		--outSAMtype BAM SortedByCoordinate
 	  """
 }
