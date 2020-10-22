@@ -10,7 +10,7 @@ input:
   tuple val(sample_id), file(reads)
 output:
   tuple val(sample_id), file("trim_*"), emit: trimmed
-  file "*.json", emit: json
+  path "*.json", emit: json
 script:
   """
   fastp \
