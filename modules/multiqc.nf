@@ -9,6 +9,6 @@ process run_multiqc {
     path 'multiqc*html'
   script:
                 """
-                multiqc .
+                multiqc $config/
                 """
 }
