@@ -1,6 +1,6 @@
 process run_fastqcSE {
         tag "$reads.simpleName"
-        cpus "$params.fastqc.cpus"
+        cpus "$params.cpus"
 
 	publishDir "${params.out}/fastqc", mode: 'copy'
 

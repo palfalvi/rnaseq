@@ -1,6 +1,6 @@
 process collect_star {
   tag "$bam"
-  cpus "$params.fastqc.cpus"
+  cpus "$params.cpus"
 
 	publishDir "${params.out}/featureCounts", mode: 'copy'
 
@@ -13,7 +13,13 @@ process collect_star {
     path "${bam}_gene.featureCounts.txt*"
   script:
     """
-    featureCounts -p -T ${task.cpus} -s ${params.featureCounts_direction} -a $gtf -o ${bam}_gene.featureCounts.txt ${bam}/*.out.bam
+    featureCounts \
+    -p \
+    -T ${task.cpus} \
+    -s ${params.featureCounts_direction} \
+    -a $gtf \
+    -o ${bam}_gene.featureCounts.txt \
+    ${bam}/*.out.bam
     """
 
 }

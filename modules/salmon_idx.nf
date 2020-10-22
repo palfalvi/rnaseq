@@ -1,16 +1,16 @@
 process salmon_idx {
-        tag "$transcriptome"
-        cpus "$params.mapping.cpus"
-        publishDir "${params.out}/salmon_index", mode: 'copy', enable: "${params.save_index}"
+  tag "$transcriptome"
+  cpus "$params.cpus"
+  publishDir path: { params.save_index ? "${params.out}/salmon_index" : params.out },
+              mode: 'copy', saveAs: { params.save_index ? it : null }
+  conda "$baseDir/conda-envs/salmon-env.yaml"
 
-        conda "$baseDir/conda-envs/salmon-env.yaml"
-
-        input:
-                path transcriptome
-        output:
-                path 'index'
-        script:
-                """
-                salmon index -p ${task.cpus} -t $transcriptome -i index
-                """
+  input:
+    path transcriptome
+  output:
+    path 'index'
+  script:
+    """
+    salmon index -p ${task.cpus} -t $transcriptome -i index
+    """
 }
