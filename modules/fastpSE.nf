@@ -8,7 +8,7 @@ input:
   file reads
 output:
   path "trim_*", emit: trimmed
-  file "*.json", emit: json
+  path "*.json", emit: json
 script:
   """
   fastp \
