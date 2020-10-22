@@ -79,7 +79,7 @@ workflow {
            https://github.com/palfalvi/rnaseq
   =======================================================
 
-  Running pipeline in $params.mode mode.
+  >> Running pipeline in $params.mode mode.
   """.stripIndent()
 
 
@@ -92,11 +92,11 @@ workflow {
     if ( params.single ) {
       // Single end reads are read as Path channels
       read_ch = Channel.fromPath( params.reads )
-      log.info "Single end reads provided."
+      log.info ">> Single end reads provided."
     } else {
       // Pair end reads are read as File Pair tuples
       read_pairs_ch = Channel.fromFilePairs( params.reads )
-      log.info "Pair end reads provided."
+      log.info ">> Pair end reads provided."
     }
   } else if ( params.sra ) {
     // SRA provided
@@ -121,11 +121,11 @@ workflow {
       // Read in salmon or kallisto index
       idx = file( params.index )
 
-      log.info "Index file provided: $params.index"
+      log.info ">> Index file provided: $params.index"
       } else if (params.transcriptome) {
 			  transcriptome = file( params.transcriptome )
-        log.info "Transcriptome file provided: $params.transcriptome"
-        log.info "Building $params.mode index ..."
+        log.info ">> Transcriptome file provided: $params.transcriptome"
+        log.info ">> Building $params.mode index ..."
         if (params.mode == 'salmon') {
           // Make salmon index
           salmon_idx(transcriptome)
@@ -144,16 +144,16 @@ workflow {
       idx = file( params.index )
       gtf = file( params.gtf )
 
-      log.info "Index file provided: $params.index"
-      log.info "GTF file provided: $params.gtf"
+      log.info ">> Index file provided: $params.index"
+      log.info ">> GTF file provided: $params.gtf"
     } else if ( params.genome && params.gtf ) {
       // Read in genome and gtf, make index
 			genome = file( params.genome )
 			gtf = file( params.gtf )
 
-      log.info "Genome file provided: $params.genome"
-      log.info "GTF file provided: $params.gtf"
-      log.info "Building $params.mode index ..."
+      log.info ">> Genome file provided: $params.genome"
+      log.info ">> GTF file provided: $params.gtf"
+      log.info ">> Building $params.mode index ..."
       star_idx(genome, gtf)
       idx = star_idx.out
     } else {

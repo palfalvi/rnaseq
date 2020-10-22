@@ -1,6 +1,6 @@
 process run_fastqc {
   tag "$sample_id"
-  cpus "$params.fastqc.cpus"
+  cpus "$params.cpus"
   publishDir "${params.out}/fastqc", mode: 'copy'
   conda "$baseDir/conda-envs/fastqc-env.yaml"
 
