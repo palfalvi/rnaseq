@@ -9,7 +9,7 @@ when:
 input:
   tuple val(sample_id), file(reads)
 output:
-  tuple(val(sample_id), file("trim_${reads[0]}", "trim_${reads[1]}")), emit: reads
+  tuple val(sample_id), file(["trim_${reads[0]}", "trim_${reads[1]}"]), emit: reads
   file "${sample_id}_fastp.json", emit: json
 script:
   """
