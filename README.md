@@ -37,7 +37,7 @@ bash Miniconda3-latest-Linux-x86_64.sh
 
 Done.
 
-### SRA accessions
+### SRA accessions ( Currently not working - waiting for nextflow 20.10 release )
 
 If you wish to use SRA ids directly, you can provide with `--sra SRP043510` instead of `--reads`. This feature, however uses the [NCBI Esearch API](https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch), which requires an NCBI API Key in your environment. To get an API Key, follow [this link](https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/).
 
