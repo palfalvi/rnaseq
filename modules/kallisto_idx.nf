@@ -2,7 +2,7 @@
 
 process kallisto_idx {
   tag "$transcriptome"
-  publishDir "${params.out}/kallisto_index",
+  publishDir path: { params.save_index ? "${params.out}/kallisto_index" : params.out },
              mode: 'copy', saveAs: { params.save_index ? it : null }
   conda "$baseDir/conda-envs/kallisto-env.yaml"
 

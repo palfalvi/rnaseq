@@ -1,7 +1,7 @@
 process salmon_idx {
   tag "$transcriptome"
   cpus "$params.cpus"
-  publishDir "${params.out}/salmon_index",
+  publishDir path: { params.save_index ? "${params.out}/salmon_index" : params.out },
               mode: 'copy', saveAs: { params.save_index ? it : null }
   conda "$baseDir/conda-envs/salmon-env.yaml"
 
