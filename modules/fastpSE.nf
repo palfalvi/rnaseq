@@ -7,7 +7,7 @@ conda "$baseDir/conda-envs/trim-env.yaml"
 input:
   file reads
 output:
-  file "trim_*", emit: trimmed
+  file "*.fastq.gz", emit: trimmed
   file "*.json", emit: json
 script:
   """
