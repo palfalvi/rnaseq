@@ -1,4 +1,4 @@
-process run_fastp {
+process run_fastp_qc {
 tag "$sample_id"
 label 'small_plus'
 cpus "$params.cpus"

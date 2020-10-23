@@ -69,6 +69,8 @@ include { star_alignSE } from './modules/star_alignSE.nf'
 include { collect_starSE } from './modules/collect_starSE.nf'
 include { run_fastp } from './modules/fastp.nf'
 include { run_fastpSE } from './modules/fastpSE.nf'
+include { run_fastp_qc } from './modules/fastp_qc.nf'
+include { run_fastpSE_qc } from './modules/fastpSE_qc.nf'
 include { run_multiqc } from './modules/multiqc.nf'
 
 

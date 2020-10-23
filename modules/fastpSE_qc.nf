@@ -1,4 +1,4 @@
-process run_fastpSE {
+process run_fastpSE_qc {
 tag "$sample_id"
 label 'small_plus'
 cpus "$params.cpus"
