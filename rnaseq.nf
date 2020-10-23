@@ -187,7 +187,7 @@ workflow {
     } else {
       // Run fastp and quant on trimmed reads.
       run_fastpSE(read_ch)
-      salmon_quantSE(idx, run_fastp.out.trimmed)
+      salmon_quantSE(idx, run_fastpSE.out.trimmed)
     }
     // Run multiqc after salmon_quant finished.
     run_multiqc(salmon_quantSE.out.collect(), "$baseDir/${params.out}")
