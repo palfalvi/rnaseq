@@ -185,75 +185,104 @@ workflow {
       salmon_quant(idx, run_fastp.out.trimmed)
       run_multiqc(salmon_quant.out.collect(), "$baseDir/${params.out}")
     }
-    // Run multiqc after salmon_quant finished.
-
 	}
 	else if( params.mode == 'salmon' && params.single ) {
     // salmon SE mode
     if ( params.skip_qc ) {
       // Don't run fastp, just quant on input reads.
       salmon_quantSE(idx, read_ch)
+      run_multiqc(salmon_quantSE.out.collect(), "$baseDir/${params.out}")
+    } else if ( params.skip_trim ) {
+      // Run fastp for QC only, just quant on input reads.
+      run_fastpSE_qc(read_ch)
+      salmon_quantSE(idx, read_ch)
+      run_multiqc(salmon_quantSE.out.collect().concat(run_fastSE_qc.out.collect()), "$baseDir/${params.out}")
     } else {
       // Run fastp and quant on trimmed reads.
       run_fastpSE(read_ch)
       salmon_quantSE(idx, run_fastpSE.out.trimmed)
+      run_multiqc(salmon_quantSE.out.collect(), "$baseDir/${params.out}")
     }
-    // Run multiqc after salmon_quant finished.
-    run_multiqc(salmon_quantSE.out.collect(), "$baseDir/${params.out}")
 		}
 	else if( params.mode == 'kallisto' && !params.single ) {
       // kallisto PE mode
       if ( params.skip_qc ) {
         // Don't run fastp, just quant on input reads.
         kallisto_quant(idx, read_pairs_ch)
+        run_multiqc(kallisto_quant.out.collect(), "$baseDir/${params.out}")
+      } else if ( params.skip_trim ) {
+        // Run fastp for QC only, just quant on input reads.
+        run_fastp_qc(read_pairs_ch)
+        kallisto_quant(idx, read_pairs_ch)
+        run_multiqc(kallisto_quant.out.collect().concat(run_fastp_qc.out.collect()), "$baseDir/${params.out}")
       } else {
         // Run fastp and quant on trimmed reads.
         run_fastp(read_pairs_ch)
         kallisto_quant(idx, run_fastp.out.trimmed)
+        run_multiqc(kallisto_quant.out.collect(), "$baseDir/${params.out}")
       }
-      // Run multiqc after salmon_quant finished.
-      run_multiqc(kallisto_quant.out.collect(), "$baseDir/${params.out}")
   	}
   else if( params.mode == 'kallisto' && params.single ) {
       // kallisto SE mode
       if ( params.skip_qc ) {
         // Don't run fastp, just quant on input reads.
         kallisto_quantSE(idx, read_ch)
+        run_multiqc(kallisto_quantSE.out.collect(), "$baseDir/${params.out}")
+      } else if ( params.skip_trim ) {
+        // Run fastp for QC only, just quant on input reads.
+        run_fastpSE_qc(read_ch)
+        kallisto_quantSE(idx, read_ch)
+        run_multiqc(kallisto_quantSE.out.collect().concat(run_fastpSE_qc.out.collect()), "$baseDir/${params.out}")
       } else {
         // Run fastp and quant on trimmed reads.
         run_fastpSE(read_ch)
         kallisto_quantSE(idx, run_fastpSE.out.trimmed)
+        run_multiqc(kallisto_quantSE.out.collect(), "$baseDir/${params.out}")
       }
       // Run multiqc after salmon_quant finished.
-      run_multiqc(kallisto_quantSE.out.collect(), "$baseDir/${params.out}")
+
   }
   else if( params.mode == 'star' && !params.single ) {
     // STAR PE module
     if ( params.skip_qc ) {
       // Don't run fastp, just map on reads
       star_align(idx, read_pairs_ch)
+      collect_star(star_align.out, gtf)
+      run_multiqc(collect_star.out.collect(), "$baseDir/${params.out}")
+    } else if ( params.skip_trim ) {
+      // Run fastp for QC only, just quant on input reads.
+      run_fastp_qc(read_pairs_ch)
+      star_align(idx, read_pairs_ch)
+      collect_star(star_align.out, gtf)
+      run_multiqc(collect_star.out.collect().concat(run_fast_qc.collect()), "$baseDir/${params.out}")
     } else {
       // Run fastp and align on trimmed reads
       run_fastp(read_pairs_ch)
       star_align(idx, run_fastp.out.trimmed)
+      collect_star(star_align.out, gtf)
+      run_multiqc(collect_star.out.collect(), "$baseDir/${params.out}")
     }
-    // collect STAR alignemnts
-    collect_star(star_align.out, gtf)
-    run_multiqc(collect_star.out.collect(), "$baseDir/${params.out}")
   }
   else if( params.mode == 'star' && params.single ) {
     // STAR SE module
     if ( params.skip_qc ) {
       // Don't run fastp, just map on reads
       star_alignSE(idx, read_ch)
+      collect_starSE(star_alignSE.out, gtf)
+      run_multiqc(collect_starSE.out.collect(), "$baseDir/${params.out}")
+    } else if ( params.skip_trim ) {
+      // Run fastp for QC only, just quant on input reads.
+      run_fastpSE_qc(read_ch)
+      star_alignSE(idx, read_ch)
+      collect_starSE(star_alignSE.out, gtf)
+      run_multiqc(collect_starSE.out.collect().concat(run_fastpSE_qc.out.collect()), "$baseDir/${params.out}")
     } else {
       // Run fastp and align on trimmed reads
       run_fastpSE(read_ch)
       star_alignSE(idx, run_fastpSE.out.trimmed)
+      collect_starSE(star_alignSE.out, gtf)
+      run_multiqc(collect_starSE.out.collect(), "$baseDir/${params.out}")
     }
-    // collect STAR alignemnts
-    collect_starSE(star_alignSE.out, gtf)
-    run_multiqc(collect_starSE.out.collect(), "$baseDir/${params.out}")
   }
 	else {
 		  error "Invalid mapping mode: ${params.mode}"
