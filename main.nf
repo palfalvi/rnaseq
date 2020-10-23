@@ -26,10 +26,10 @@ def helpMessage() {
           --out                          Output diresctory. [results]
           --mode                         Mapping method to use. Accepted method: 'salmon', 'kallisto' and 'star'. Default is ['salmon']
           --single                       Required for single end read processing.
-          --skip_qc                      If specified, fastp step (including adapter trimming) is omitted mapping is performed directly on input reads.
-          --save_index                   Save index folder for later use.
+          --skip_trim                    If specified, fastp runs only quality check and the mapping is done on the raw input reads.
+          --skip_qc                      If specified, fastp step (including adapter trimming) is omitted standard mapping is performed directly on input reads.
+          --save_index                   Save transcriptome/genome index for later use.
           --index                        External index file. Overrides index creations. If provided, transcriptome and genome options are deprecated.
-          --cpus                         Number of threads to use per process. [20]
           --executor                     HPC executor, if available. As this workflow is optimized to NIBB-BIAS5 server, the default is ['pbspro']
 
     kallisto single end specific options:
@@ -40,6 +40,9 @@ def helpMessage() {
           --genome                       Genome fasta file.
           --gtf                          GTF file.
           --sjdbGTFfeatureExon           sjdbGTFfeatureExon option from STAR. [exon]
+
+    Computer allocation settings
+          -profile                       Sets the running environment. Default is NIBB-BIAS5 PBSPro. 'cde' and 'local' are available to run on NIBB-CDE server or on local machine.
     """.stripIndent()
 }
 
@@ -94,14 +97,17 @@ workflow {
     if ( params.single ) {
       // Single end reads are read as Path channels
       read_ch = Channel.fromPath( params.reads )
-      log.info ">> Single end reads provided."
+      log.info ">> Single end reads provided:"
+      log.info "$read_ch.view()"
     } else {
       // Pair end reads are read as File Pair tuples
       read_pairs_ch = Channel.fromFilePairs( params.reads )
-      log.info ">> Pair end reads provided."
+      log.info ">> Pair end reads provided:"
+      log.info "$read_pairs_ch.view()"
     }
   } else if ( params.sra ) {
     // SRA provided
+    error "SRA is currently not supported. Please download fastq files and provide to --reads"
     if ( params.single ) {
       // Single end SRA is provided,
       srain = Channel.fromSRA( params.sra )
