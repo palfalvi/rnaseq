@@ -171,6 +171,10 @@ workflow {
     if ( params.skip_qc ) {
       // Don't run fastp, just quant on input reads.
       salmon_quant(idx, read_pairs_ch)
+    } else if ( params.skip_trim ) {
+      // Run fastp for QC only, just quant on input reads.
+      run_fastp_qc(read_pairs_ch)
+      salmon_quant(idx, read_pairs_ch)
     } else {
       // Run fastp and quant on trimmed reads.
       run_fastp(read_pairs_ch)

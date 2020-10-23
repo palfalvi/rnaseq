@@ -5,6 +5,8 @@ cpus "$params.cpus"
 publishDir "${params.out}/fastp_qc", mode: 'copy', pattern: '*.json'
 conda "$baseDir/conda-envs/trim-env.yaml"
 
+when:
+  !skip_trim
 input:
   file reads
 output:
@@ -16,6 +18,7 @@ script:
   -w ${task.cpus} \
   -i ${reads} \
   -o trim_${reads} \
+  --overrepresentation_analysis \
   --json ${reads.simpleName}_fastp.json
   """
 }
