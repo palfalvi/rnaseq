@@ -1,5 +1,6 @@
 process salmon_quant {
 	tag "${sample_id}"
+	label 'small'
 	publishDir "${params.out}/salmon", mode: 'copy'
 	cpus "$params.cpus"
   conda "$baseDir/conda-envs/salmon-env.yaml"

@@ -1,5 +1,6 @@
 process kallisto_quantSE {
 	tag "$reads.simpleName"
+	label 'small'
 	publishDir "${params.out}/kallisto", mode: 'copy'
 	cpus "$params.cpus"
   conda "$baseDir/conda-envs/kallisto-env.yaml"

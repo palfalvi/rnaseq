@@ -1,5 +1,6 @@
 process salmon_idx {
   tag "$transcriptome"
+  label 'small'
   cpus "$params.cpus"
   publishDir path: { params.save_index ? "${params.out}/salmon_index" : params.out },
               mode: 'copy', saveAs: { params.save_index ? it : null }
