@@ -171,17 +171,20 @@ workflow {
     if ( params.skip_qc ) {
       // Don't run fastp, just quant on input reads.
       salmon_quant(idx, read_pairs_ch)
+      run_multiqc(salmon_quant.out.collect(), "$baseDir/${params.out}")
     } else if ( params.skip_trim ) {
       // Run fastp for QC only, just quant on input reads.
       run_fastp_qc(read_pairs_ch)
       salmon_quant(idx, read_pairs_ch)
+      run_multiqc(concat(salmon_quant.out.collect(), run_fastp_qc.out.collect()), "$baseDir/${params.out}")
     } else {
       // Run fastp and quant on trimmed reads.
       run_fastp(read_pairs_ch)
       salmon_quant(idx, run_fastp.out.trimmed)
+      run_multiqc(salmon_quant.out.collect(), "$baseDir/${params.out}")
     }
     // Run multiqc after salmon_quant finished.
-    run_multiqc(salmon_quant.out.collect(), "$baseDir/${params.out}")
+
 	}
 	else if( params.mode == 'salmon' && params.single ) {
     // salmon SE mode
