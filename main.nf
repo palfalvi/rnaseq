@@ -97,13 +97,11 @@ workflow {
     if ( params.single ) {
       // Single end reads are read as Path channels
       read_ch = Channel.fromPath( params.reads )
-      log.info ">> Single end reads provided:"
-      log.info "$read_ch.view()"
+      log.info ">> Single end reads provided."
     } else {
       // Pair end reads are read as File Pair tuples
       read_pairs_ch = Channel.fromFilePairs( params.reads )
-      log.info ">> Pair end reads provided:"
-      log.info "$read_pairs_ch.view()"
+      log.info ">> Pair end reads provided."
     }
   } else if ( params.sra ) {
     // SRA provided
