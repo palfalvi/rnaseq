@@ -1,5 +1,6 @@
 process kallisto_quant {
 	tag "${sample_id}"
+	label 'small'
 	publishDir "${params.out}/kallisto", mode: 'copy'
 	cpus "$params.cpus"
   conda "$baseDir/conda-envs/kallisto-env.yaml"
@@ -16,7 +17,7 @@ process kallisto_quant {
 		-i $transcriptome_idx \
 		-o $sample_id ${reads[0]} ${reads[1]} \
 		&> ${sample_id}.log
-		
+
     mv ${sample_id}.log ${sample_id}/
     """
 }

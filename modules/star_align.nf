@@ -1,5 +1,6 @@
 process star_align {
 	tag "$sample_id"
+	label 'small_plus'
 	publishDir "${params.out}/star", mode: 'copy'
 	cpus "$params.cpus"
   conda "$baseDir/conda-envs/star-env.yaml"

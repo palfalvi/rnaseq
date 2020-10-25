@@ -3,8 +3,8 @@
 
  This pipeline is a basic workflow to QC and quantify raw RNA-seq reads with the following steps:
 
-### 1, Raw fastq quality check
-Utilizing [`fastqc`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) software.
+### 1, Raw fastq quality check and filtering
+Utilizing [`fastp`](https://github.com/OpenGene/fastp) software, quality values are recorded and low quality reads removed. `fastp` also recognizes and trims adaptors.
 
 ### 2, Index generation
 This depends on the quantification mode selected. Currently [`salmon`](https://combine-lab.github.io/salmon/), [`kallisto`](https://pachterlab.github.io/kallisto/) and [`star`](https://github.com/alexdobin/STAR) are supported.
@@ -37,7 +37,9 @@ bash Miniconda3-latest-Linux-x86_64.sh
 
 Done.
 
-### SRA accessions ( Currently not working - waiting for nextflow 20.10 release )
+* If it did not work on NIBB-BIAS5, please try on bias5-db.
+
+### SRA accessions [currently not supported. Coming soon.]
 
 If you wish to use SRA ids directly, you can provide with `--sra SRP043510` instead of `--reads`. This feature, however uses the [NCBI Esearch API](https://www.ncbi.nlm.nih.gov/books/NBK25499/#chapter4.ESearch), which requires an NCBI API Key in your environment. To get an API Key, follow [this link](https://ncbiinsights.ncbi.nlm.nih.gov/2017/11/02/new-api-keys-for-the-e-utilities/).
 
@@ -75,7 +77,7 @@ nextflow run palfalvi/rnaseq --mode kallisto --reads /path/to/reads/*.fastq --tr
 nextflow run palfalvi/rnaseq --mode star --reads /path/to/reads/*R{1,2}.fastq --genome genome.fastq --gtf annotation.gtf
 ```
 
-#### Salmon with no fastqc and save the index files for later user. Also, save the results into `salmon_output` directory.
+#### Salmon with no QC and trimming and save the index files for later use. Also, save the results into `salmon_output` directory.
 
 ```
 nextflow run palfalvi/rnaseq --reads /path/to/reads/*R{1,2}.fastq --transcriptome transcripts.fasta --save_index --skip_qc --out salmon_output

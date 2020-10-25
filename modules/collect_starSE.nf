@@ -1,5 +1,6 @@
 process collect_starSE {
   tag "$bam"
+  label 'small'
   cpus "$params.cpus"
 
 	publishDir "${params.out}/featureCounts", mode: 'copy'
