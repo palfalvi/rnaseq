@@ -27,6 +27,7 @@ def helpMessage() {
           --mode                         Mapping method to use. Accepted method: 'salmon', 'kallisto' and 'star'. Default is ['salmon']
           --single                       Required for single end read processing.
           --skip_trim                    If specified, fastp runs only quality check and the mapping is done on the raw input reads.
+          --save_trimmed                 Saves trimmed fastq.gz files in 'trimmed' directory.
           --skip_qc                      If specified, fastp step (including adapter trimming) is omitted standard mapping is performed directly on input reads.
           --save_index                   Save transcriptome/genome index for later use.
           --index                        External index file. Overrides index creations. If provided, transcriptome and genome options are deprecated.
