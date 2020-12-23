@@ -11,6 +11,6 @@ process run_multiqc {
   script:
     """
     export LC_ALL=en_US.utf8
-    multiqc .
+    multiqc $launchDir/$config/
     """
 }

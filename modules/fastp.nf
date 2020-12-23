@@ -15,6 +15,7 @@ output:
   tuple val(sample_id), file("trim_*"), emit: trimmed
   path "*.json", emit: json
 script:
+
   """
   fastp \
   -w ${task.cpus} \

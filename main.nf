@@ -98,11 +98,11 @@ workflow {
     if ( params.single ) {
       // Single end reads are read as Path channels
       read_ch = Channel.fromPath( params.reads )
-      log.info ">> Single end reads provided."
+      read_ch.subscribe {  println ">> Single end reads provided: $it"  }
     } else {
       // Pair end reads are read as File Pair tuples
       read_pairs_ch = Channel.fromFilePairs( params.reads )
-      log.info ">> Pair end reads provided."
+      read_pairs_ch.subscribe {  println ">> Pair end reads provided: $it"  }
     }
   } else if ( params.sra ) {
     // SRA provided
@@ -177,16 +177,24 @@ workflow {
     // salmon PE mode
     if ( params.skip_qc ) {
       // Don't run fastp, just quant on input reads.
+      log.info ">> Skipping fastp step."
+      log.info ">> Starting salmon quantification..."
       salmon_quant(idx, read_pairs_ch)
       run_multiqc(salmon_quant.out.collect(), "$baseDir/${params.out}")
     } else if ( params.skip_trim ) {
       // Run fastp for QC only, just quant on input reads.
+      log.info ">> Starting fastp without adapter trimmin..."
       run_fastp_qc(read_pairs_ch)
+
+      log.info ">> Starting salmon quantification..."
       salmon_quant(idx, read_pairs_ch)
       run_multiqc(salmon_quant.out.collect().concat(run_fastp_qc.out.collect()), "$baseDir/${params.out}")
     } else {
       // Run fastp and quant on trimmed reads.
+      log.info ">> Starting fastp adaptor trimming..."
       run_fastp(read_pairs_ch)
+
+      log.info ">> Starting salmon quantification..."
       salmon_quant(idx, run_fastp.out.trimmed)
       run_multiqc(salmon_quant.out.collect(), "$baseDir/${params.out}")
     }
@@ -195,16 +203,24 @@ workflow {
     // salmon SE mode
     if ( params.skip_qc ) {
       // Don't run fastp, just quant on input reads.
+      log.info ">> Skipping fastp step."
+      log.info ">> Starting salmon quantification..."
       salmon_quantSE(idx, read_ch)
       run_multiqc(salmon_quantSE.out.collect(), "$baseDir/${params.out}")
     } else if ( params.skip_trim ) {
       // Run fastp for QC only, just quant on input reads.
+      log.info ">> Starting fastp without adapter trimming..."
       run_fastpSE_qc(read_ch)
+
+      log.info ">> Starting salmon quantification..."
       salmon_quantSE(idx, read_ch)
       run_multiqc(salmon_quantSE.out.collect().concat(run_fastSE_qc.out.collect()), "$baseDir/${params.out}")
     } else {
       // Run fastp and quant on trimmed reads.
+      log.info ">> Starting fastp adaptor trimming..."
       run_fastpSE(read_ch)
+
+      log.info ">> Starting salmon quantification..."
       salmon_quantSE(idx, run_fastpSE.out.trimmed)
       run_multiqc(salmon_quantSE.out.collect(), "$baseDir/${params.out}")
     }
@@ -222,7 +238,10 @@ workflow {
         run_multiqc(kallisto_quant.out.collect().concat(run_fastp_qc.out.collect()), "$baseDir/${params.out}")
       } else {
         // Run fastp and quant on trimmed reads.
+        log.info ">> Starting fastp adaptor trimming..."
         run_fastp(read_pairs_ch)
+
+        log.info ">> Starting kallisto quantification..."
         kallisto_quant(idx, run_fastp.out.trimmed)
         run_multiqc(kallisto_quant.out.collect(), "$baseDir/${params.out}")
       }
