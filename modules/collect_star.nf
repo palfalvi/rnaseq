@@ -1,7 +1,6 @@
 process collect_star {
   tag "$bam"
   label 'small'
-  cpus "$params.cpus"
 
 	publishDir "${params.out}/featureCounts", mode: 'copy'
 
@@ -10,12 +9,16 @@ process collect_star {
 	input:
 	  path bam
 	  path gtf
+
   output:
     path "${bam}_gene.featureCounts.txt*"
+
   script:
+
+    def paired = params.single ? "" : "-p"
     """
     featureCounts \
-    -p \
+    $paired \
     -T ${task.cpus} \
     -s ${params.featureCounts_direction} \
     -a $gtf \

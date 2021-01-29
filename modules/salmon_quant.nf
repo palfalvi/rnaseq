@@ -1,24 +1,28 @@
 process salmon_quant {
 	tag "${sample_id}"
+
 	label 'small'
 	publishDir "${params.out}/salmon", mode: 'copy'
-	cpus "$params.cpus"
+
   conda "$baseDir/conda-envs/salmon-env.yaml"
 
   input:
   	path transcriptome_idx
     tuple val(sample_id), file(reads)
+
   output:
     path sample_id
+
   script:
+	  def inputs = params.single ? "-r $reads"      : "-1 ${reads[0]} -2 ${reads[1]}"
+
     """
     salmon quant \
 		--libType A \
 		--validateMappings \
 		-p ${task.cpus} \
 		-i $transcriptome_idx \
-		-1 ${reads[0]} \
-		-2 ${reads[1]} \
+		$inputs \
 		-o $sample_id
     """
 }
