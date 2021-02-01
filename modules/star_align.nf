@@ -24,6 +24,7 @@ process star_align {
 		--readFilesCommand zcat \
 		--outFileNamePrefix ${sample_id}/${sample_id}_ \
 		--quantMode TranscriptomeSAM GeneCounts \
+		--outSAMattributes NH HI AS NM MD \
 		--outSAMtype BAM SortedByCoordinate
 		"""
 }

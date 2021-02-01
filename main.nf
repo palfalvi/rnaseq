@@ -135,12 +135,14 @@ workflow {
 	 		error "Transcriptome fasta file is not provided for ${params.mode} mapping. Please specify --transcriptome flag"
 		}
 	} else if (params.mode == 'star') {
-		if ( params.index && params.gtf ) {
+		if ( params.index && params.gtf && params.rsem_index ) {
       // Read in index and gtf files
       idx = file( params.index )
+      rsem_idx = file( params.rsem_index )
       gtf = file( params.gtf )
 
-      log.info ">> Index file provided: $params.index"
+      log.info ">> STAR index file provided: $params.index"
+      log.info ">> RSEM index file provided: $params.rsem_index"
       log.info ">> GTF file provided: $params.gtf"
     } else if ( params.genome && params.gtf ) {
       // Read in genome and gtf, make index
@@ -152,6 +154,8 @@ workflow {
       log.info ">> Building $params.mode index ..."
       star_idx(genome, gtf)
       idx = star_idx.out
+      rsem_idx(genome, gtf)
+      rsem_idx = rsem_idx.out
     } else {
 			error "Genome and/or GTF annotation file is not provided, but required for STAR mapping."
 		}
@@ -200,8 +204,9 @@ workflow {
     star_align(idx, read_ch)
     log.info ">> Collecting reads with featureCount."
     log.info ">> For differential analysis, please consider pseudoalignment softwares."
-    collect_star(star_align.out, gtf)
-    run_multiqc(collect_star.out.collect(), "$launchDir/${params.out}")
+    rsem( star_align.out, gtf, rsem_idx )
+    //collect_star(star_align.out, gtf)
+    run_multiqc(rsem.out.collect(), "$launchDir/${params.out}")
   }
 }
 
