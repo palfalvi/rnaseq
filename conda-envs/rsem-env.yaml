@@ -1,4 +1,4 @@
-name: trim-env
+name: rsem-env
 channels:
     - bioconda
     - conda-forge
