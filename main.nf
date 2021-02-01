@@ -215,3 +215,4 @@ workflow.onComplete {
       log.info "[$workflow.complete] >> Please revise your code and resubmit jobs with the -resume option or reach out for help at https://github.com/palfalvi/rnaseq."
     }
 }
+}
