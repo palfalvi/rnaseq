@@ -9,6 +9,7 @@ process rsem {
 	input:
 	  path bam
 	  path gtf
+    path rsem_idx
 
   output:
     path "${bam}_rsem*"
@@ -26,7 +27,7 @@ process rsem {
     --no-qualities \
     --bam \
     ${bam} \
-    REFERENCE \
+    $rsem_idx \
     ${bam.simpleName}_rsem
     """
 
