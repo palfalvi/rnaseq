@@ -1,4 +1,4 @@
-process run_fastp {
+process fastp {
 tag "$sample_id"
 
 label 'small_plus'
@@ -12,7 +12,7 @@ conda "$baseDir/conda-envs/trim-env.yaml"
 
 input:
   tuple val(sample_id), file(reads)
-  
+
 output:
   tuple val(sample_id), file("trim_*"), optional: true, emit: trimmed
   path "*.json", emit: json

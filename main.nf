@@ -67,7 +67,7 @@ include { kallisto_quant } from './modules/kallisto_quant.nf'
 include { star_idx } from './modules/star_idx.nf'
 include { star_align } from './modules/star_align.nf'
 include { collect_star } from './modules/collect_star.nf'
-include { run_fastp } from './modules/fastp.nf'
+include { fastp } from './modules/fastp.nf'
 include { run_multiqc } from './modules/multiqc.nf'
 
 
