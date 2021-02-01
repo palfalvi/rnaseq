@@ -93,13 +93,13 @@ workflow {
     Channel
       .fromFilePairs( params.reads, size: params.single ? 1 : 2 )
       .ifEmpty { exit 1, "Reads are not provided correctly ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --single on the command line." }
-      .into { read_files }
+      .set { read_files }
 
   } else if ( params.sra ) {
     // SRA provided
     Channel
       .fromSRA( params.sra )
-      .into { read_files }
+      .set { read_files }
     //error "SRA is currently not supported. Please download fastq files and provide to --reads"
   } else {
     error "No reads provided. Please specify reads with the --reads flag."
