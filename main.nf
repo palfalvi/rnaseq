@@ -188,12 +188,12 @@ workflow {
   if( params.mode == 'salmon') {
     log.info ">> Starting salmon quantification."
     salmon_quant(idx, read_ch)
-    run_multiqc(salmon_quant.out.collect(), "$baseDir/${params.out}")
+    run_multiqc(salmon_quant.out.collect(), "$launchDir/$baseDir/${params.out}")
   }
   if( params.mode == 'kallisto') {
     log.info ">> Starting kallisto quantification."
     kallisto_quant(idx, read_ch)
-    run_multiqc(kallisto_quant.out.collect(), "$baseDir/${params.out}")
+    run_multiqc(kallisto_quant.out.collect(), "$launchDir/$baseDir/${params.out}")
   }
   if ( params.mode == 'star' ) {
     log.info ">> Starting STAR mapping."
@@ -201,7 +201,7 @@ workflow {
     log.info ">> Collecting reads with featureCount."
     log.info ">> For differential analysis, please consider pseudoalignment softwares."
     collect_star(star_align.out, gtf)
-    run_multiqc(collect_star.out.collect(), "$baseDir/${params.out}")
+    run_multiqc(collect_star.out.collect(), "$launchDir/$baseDir/${params.out}")
   }
 
 
