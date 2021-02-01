@@ -203,7 +203,7 @@ workflow {
     collect_star(star_align.out, gtf)
     run_multiqc(collect_star.out.collect(), "$launchDir/${params.out}")
   }
-
+}
 
 workflow.onComplete {
     if ( workflow.success ) {
@@ -214,5 +214,4 @@ workflow.onComplete {
       log.info "[$workflow.complete] >> The script quit with ERROR after ${workflow.duration}."
       log.info "[$workflow.complete] >> Please revise your code and resubmit jobs with the -resume option or reach out for help at https://github.com/palfalvi/rnaseq."
     }
-}
 }
