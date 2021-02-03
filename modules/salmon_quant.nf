@@ -5,6 +5,7 @@ process salmon_quant {
 	publishDir "${params.out}/salmon", mode: 'copy'
 
   conda "$baseDir/conda-envs/salmon-env.yaml"
+	container "quay.io/biocontainers/salmon"
 
   input:
   	path transcriptome_idx

@@ -6,6 +6,7 @@ process rsem_idx {
               mode: 'copy', saveAs: { params.save_index ? it : null }
 
   conda "$baseDir/conda-envs/rsem-env.yaml"
+  container "quay.io/biocontainers/rsem"
 
 	input:
 	  path genome

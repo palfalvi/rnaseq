@@ -5,6 +5,7 @@ process star_align {
 	publishDir "${params.out}/star", mode: 'copy'
 
   conda "$baseDir/conda-envs/star-env.yaml"
+	container "quay.io/biocontainers/star"
 
   input:
     path genome_idx

@@ -9,6 +9,7 @@ publishDir path: { params.save_trimmed ? "${params.out}/trimmed" : params.out },
             pattern: 'trim_*'
 
 conda "$baseDir/conda-envs/trim-env.yaml"
+container "quay.io/biocontainers/fastp"
 
 input:
   tuple val(sample_id), file(reads)

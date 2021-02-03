@@ -5,6 +5,7 @@ process rsem {
 	publishDir "${params.out}/rsem", mode: 'copy'
 
   conda "$baseDir/conda-envs/rsem-env.yaml"
+  container "quay.io/biocontainers/rsem"
 
 	input:
 	  path bam

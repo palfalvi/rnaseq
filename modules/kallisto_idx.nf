@@ -6,13 +6,14 @@ process kallisto_idx {
              mode: 'copy', saveAs: { params.save_index ? it : null }
 
   conda "$baseDir/conda-envs/kallisto-env.yaml"
+  container "quay.io/biocontainers/kallisto"
 
   input:
     path transcriptome
 
   output:
     path 'index'
-    
+
   script:
     """
     kallisto index -i index $transcriptome

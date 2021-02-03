@@ -1,10 +1,11 @@
 process kallisto_quant {
 	tag "${sample_id}"
-	
+
 	label 'small'
 	publishDir "${params.out}/kallisto", mode: 'copy'
 
   conda "$baseDir/conda-envs/kallisto-env.yaml"
+	container "quay.io/biocontainers/kallisto"
 
   input:
   	path transcriptome_idx

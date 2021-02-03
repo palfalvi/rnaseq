@@ -31,7 +31,6 @@ def helpMessage() {
           --skip_qc                      If specified, fastp step (including adapter trimming) is omitted standard mapping is performed directly on input reads.
           --save_index                   Save transcriptome/genome index for later use.
           --index                        External index file. Overrides index creations. If provided, transcriptome and genome options are deprecated.
-          --executor                     HPC executor, if available. As this workflow is optimized to NIBB-BIAS5 server, the default is ['pbspro']
 
     kallisto single end specific options:
           --fragment_length              Average fragment length for the sequencing. [300]
@@ -81,6 +80,7 @@ workflow {
   =======================================================
 
   >> Running pipeline in $params.mode mode.
+  >>
   """.stripIndent()
 
 

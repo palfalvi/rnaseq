@@ -6,6 +6,7 @@ process star_idx {
              mode: 'copy', saveAs: { params.save_index ? it : null }
 
   conda "$baseDir/conda-envs/star-env.yaml"
+  container "quay.io/biocontainers/star"
 
   input:
     path genome
@@ -13,7 +14,7 @@ process star_idx {
 
   output:
     path "${genome.simpleName}_idx"
-    
+
   script:
     """
 		mkdir ${genome.simpleName}_idx
