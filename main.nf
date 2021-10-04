@@ -23,6 +23,7 @@ def helpMessage() {
           --reads                        Path to raw reads in fastq or fastq.gz formats. For pair end reads, use {1,2}, e.g. /path/to/reads/*R{1,2}.fastq
 
     Options:
+          --ont                          Reads are from Oxford Nanopore Technologies long reads. [false]
           --out                          Output diresctory. [results]
           --mode                         Mapping method to use. Accepted method: 'salmon', 'kallisto' and 'star'. Default is ['salmon']
           --single                       Required for single end read processing.
@@ -93,7 +94,7 @@ workflow {
   if ( params.reads ) {
     // Local reads provided
     Channel
-      .fromFilePairs( params.reads, size: params.single ? 1 : 2 )
+      .fromFilePairs( params.reads, size: (params.single || params.ont) ? 1 : 2 )
       .ifEmpty { exit 1, "Reads are not provided correctly ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --single on the command line." }
       .set { read_files }
 
@@ -115,12 +116,34 @@ workflow {
 * Also look for external index files
 */
 	if (params.mode == 'salmon' || params.mode == 'kallisto') {
-		if ( params.index ) {
+
+    if ( params.ont ) {
+
+      log.info ">> ONT reads are provided."
+
+      if ( params.index ) {
+
+        idx = file( params.index )
+        log.info ">> Index file provided: $params.index"
+
+      } else if ( params.transcriptome ) {
+        genome = file( params.genome )
+        log.info ">> Transcriptome file provided: $params.transcriptome"
+        log.info ">> Building minimap2 index for $params.mode quantification ..."
+
+        minimap2_idx(genome)
+        idx = minimap2_idx.out.idx
+
+      } else {
+        error "ONT reads are provided for ${params.mode} mapping, which requires a transcriptome fasta file. \nPlease provide these with the --transcriptome flag."
+      }
+
+    } else if ( params.index ) {
       // Read in salmon or kallisto index
       idx = file( params.index )
 
       log.info ">> Index file provided: $params.index"
-      } else if (params.transcriptome) {
+    } else if (params.transcriptome) {
 			  transcriptome = file( params.transcriptome )
         log.info ">> Transcriptome file provided: $params.transcriptome"
         log.info ">> Building $params.mode index ..."
@@ -190,27 +213,48 @@ workflow {
 /*
 * Quantification
 */
+  if ( params.ont ) {
 
-  if( params.mode == 'salmon') {
-    log.info ">> Starting salmon quantification."
-    salmon_quant(idx, read_ch)
-    run_multiqc(salmon_quant.out.collect(), "$launchDir/${params.out}")
+    minimap2(idx, read_ch)
+
+    if( params.mode == 'salmon') {
+      log.info ">> Starting salmon quantification."
+      salmon_quant(idx, minimap2.out.bam)
+      run_multiqc(salmon_quant.out.collect(), "$launchDir/${params.out}")
+    }
+    if( params.mode == 'kallisto') {
+      // log.info ">> Starting kallisto quantification."
+      // kallisto_quant(idx, read_ch)
+      // run_multiqc(kallisto_quant.out.collect(), "$launchDir/${params.out}")
+      error "kallisto is not compatible with ONT reads at the moment."
+    }
+    if ( params.mode == 'star' ) {
+      error "STAR is not compatible with ONT reads at the moment."
+    }
+  } else {
+    if( params.mode == 'salmon') {
+      log.info ">> Starting salmon quantification."
+      salmon_quant(idx, read_ch)
+      run_multiqc(salmon_quant.out.collect(), "$launchDir/${params.out}")
+    }
+    if( params.mode == 'kallisto') {
+      log.info ">> Starting kallisto quantification."
+      kallisto_quant(idx, read_ch)
+      run_multiqc(kallisto_quant.out.collect(), "$launchDir/${params.out}")
+    }
+    if ( params.mode == 'star' ) {
+      log.info ">> Starting STAR mapping."
+      star_align(idx, read_ch)
+      log.info ">> Collecting reads with featureCount."
+      log.info ">> For differential analysis, please consider pseudoalignment softwares."
+      rsem( star_align.out, gtf, rsem_idx )
+      //collect_star(star_align.out, gtf)
+      run_multiqc(rsem.out.collect(), "$launchDir/${params.out}")
+    }
   }
-  if( params.mode == 'kallisto') {
-    log.info ">> Starting kallisto quantification."
-    kallisto_quant(idx, read_ch)
-    run_multiqc(kallisto_quant.out.collect(), "$launchDir/${params.out}")
-  }
-  if ( params.mode == 'star' ) {
-    log.info ">> Starting STAR mapping."
-    star_align(idx, read_ch)
-    log.info ">> Collecting reads with featureCount."
-    log.info ">> For differential analysis, please consider pseudoalignment softwares."
-    rsem( star_align.out, gtf, rsem_idx )
-    //collect_star(star_align.out, gtf)
-    run_multiqc(rsem.out.collect(), "$launchDir/${params.out}")
-  }
-}
+
+
+} // end of workflow
 
 workflow.onComplete {
     if ( workflow.success ) {
