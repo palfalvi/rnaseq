@@ -95,9 +95,6 @@ workflow {
 
   if ( params.reads ) {
     // Local reads provided
-    if ( params.ont ) {
-      params.single = true
-    }
     Channel
       .fromFilePairs( params.reads, size: params.single ? 1 : 2 )
       .ifEmpty { exit 1, "Reads are not provided correctly ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --single on the command line." }
