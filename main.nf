@@ -127,11 +127,10 @@ workflow {
         log.info ">> Index file provided: $params.index"
 
       } else if ( params.transcriptome ) {
-        genome = file( params.genome )
         log.info ">> Transcriptome file provided: $params.transcriptome"
         log.info ">> Building minimap2 index for $params.mode quantification ..."
 
-        minimap2_idx(genome)
+        minimap2_idx( params.transcriptome )
         idx = minimap2_idx.out.idx
 
       } else {
