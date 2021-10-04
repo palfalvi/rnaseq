@@ -212,6 +212,7 @@ workflow {
 
   } else {
     log.info ">> Skipping fastp step."
+    read_files.set { read_ch }
   }
 
 /*
