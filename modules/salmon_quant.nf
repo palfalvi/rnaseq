@@ -28,4 +28,3 @@ process salmon_quant {
 		-o $sample_id
     """
 }
-salmon quant -t transcripts.fa -l <LIBTYPE> -a aln.bam -o salmon_quant
