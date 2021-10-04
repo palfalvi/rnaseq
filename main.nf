@@ -199,7 +199,7 @@ workflow {
     fastp(read_files)
 
     if ( !params.skip_trim ) {
-      log.info ">> Adapter trimming finished."
+      log.info ">> Automatically trimming adapters."
       fastp.out.trimmed.set { read_ch } // I do not know if this can work
     } else {
       log.info ">> Skipped adapter trimming."
