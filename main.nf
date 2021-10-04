@@ -221,7 +221,7 @@ workflow {
 
     if( params.mode == 'salmon') {
       log.info ">> Starting salmon quantification."
-      salmon_quant(idx, minimap2.out.bam)
+      salmon_quant(params.transcriptome, minimap2.out.bam)
       run_multiqc(salmon_quant.out.collect(), "$launchDir/${params.out}")
     }
     if( params.mode == 'kallisto') {
