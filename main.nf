@@ -216,7 +216,7 @@ workflow {
 */
   if ( params.ont ) {
 
-    minimap2(idx, read_ch)
+    minimap2(idx, reads_ch)
 
     if( params.mode == 'salmon') {
       log.info ">> Starting salmon quantification."
