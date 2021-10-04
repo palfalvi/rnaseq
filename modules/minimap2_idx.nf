@@ -1,4 +1,4 @@
-process minimap2 {
+process minimap2_idx {
   tag "$sample_id"
   label 'long_job'
 
