@@ -15,13 +15,12 @@ process salmon_quant {
     path sample_id
 
   script:
-		def inputs = params.ont ? "-a $reads"             : ( params.single ? "-r $reads" : "-1 ${reads[0]} -2 ${reads[1]}" )
+		def inputs = params.ont ? "-a $reads"             : ( params.single ? "-r $reads --validateMappings" : "-1 ${reads[0]} -2 ${reads[1]} --validateMappings" )
 		def idx    = params.ont ? "-t $transcriptome_idx" : "-i $transcriptome_idx"
 
     """
     salmon quant \
 		--libType A \
-		--validateMappings \
 		-p ${task.cpus} \
 		$idx \
 		$inputs \
