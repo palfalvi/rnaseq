@@ -8,7 +8,6 @@ process minimap2_idx {
 
   input:
     path index
-    tuple val(sample_id), file(reads)
 
   output:
     path "*.mmi", emit: idx
