@@ -1,5 +1,6 @@
 process kallisto_quant {
 	tag "${sample_id}"
+	errorStrategy 'ignore'
 
 	label 'small'
 	publishDir "${params.out}/kallisto", mode: 'copy'
