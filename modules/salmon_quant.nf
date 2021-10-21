@@ -1,5 +1,6 @@
 process salmon_quant {
 	tag "${sample_id}"
+	errorStrategy 'ignore'
 
 	label 'small'
 	publishDir "${params.out}/salmon", mode: 'copy'
